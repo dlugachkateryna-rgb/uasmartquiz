@@ -449,6 +449,7 @@ h2.sec-title em{font-style:normal;color:var(--purple2)}
 .field select option{background:#1b1430;color:var(--white)}
 .field input:focus,.field select:focus,.field textarea:focus{border-color:var(--yellow);background:rgba(255,209,0,.06)}
 .field textarea{resize:vertical;min-height:96px}
+.field input[type=date]{color-scheme:dark}
 .field input::placeholder,.field textarea::placeholder{color:#6f6788}
 .orderbox .send{width:100%;justify-content:center;margin-top:6px}
 #orderThanks{display:none;text-align:center;padding:30px 10px}
@@ -539,9 +540,9 @@ footer .script{color:var(--yellow);font-size:24px;display:block;margin-bottom:8p
   <span class="floatduck" data-speed="-3" style="bottom:30%;right:16%;width:64px;transform:scaleX(-1)"><img src="photos/duck.png" alt=""></span>
   <div class="logo-grad" id="heroLogo" role="img" aria-label="UA Smart Quiz логотип"></div>
   <h1>
-    <span class="word w1"><span>Створюємо атмосферу,</span></span><br>
-    <span class="word w2"><span>наповнену азартом, веселощами</span></span><br>
-    <span class="word w3"><span>та новими знайомствами</span></span>
+    <span class="word w1"><span>Наповніть свою подію</span></span><br>
+    <span class="word w2"><span>азартом, веселощами</span></span><br>
+    <span class="word w3"><span>та яскравими емоціями</span></span>
   </h1>
   <p class="tag">Тематичні квізи • Корпоративи • Приватні івенти</p>
   <div class="cta-row">
@@ -783,6 +784,20 @@ footer .script{color:var(--yellow);font-size:24px;display:block;margin-bottom:8p
           <label>Локація</label>
           <input type="text" name="Локація" placeholder="Місто / заклад, де плануєте гру">
         </div>
+        <div class="frow">
+          <div class="field">
+            <label>Коли плануєте? <span style="font-weight:400">(опційно)</span></label>
+            <select name="Період" id="periodSel">
+              <option value="" selected>Без дати / ще не знаю</option>
+              <option>Найближчий тиждень</option>
+              <option>Протягом місяця</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Точна дата <span style="font-weight:400">(якщо вже є)</span></label>
+            <input type="date" name="Дата" id="dateInp">
+          </div>
+        </div>
         <div class="field" style="margin-bottom:16px">
           <label>Додаткова інформація</label>
           <textarea name="Коментар" placeholder="Розкажи, що шукаєш, або постав питання (опційно)"></textarea>
@@ -977,6 +992,18 @@ document.querySelectorAll('.vopt').forEach(v=>v.addEventListener('click',e=>{
 }));
 
 // ---------- order form ----------
+// months into period select (next 12)
+const periodSel=document.getElementById('periodSel');
+const MONTHS=['Січень','Лютий','Березень','Квітень','Травень','Червень','Липень','Серпень','Вересень','Жовтень','Листопад','Грудень'];
+{
+  const now=new Date();
+  for(let i=0;i<12;i++){
+    const d=new Date(now.getFullYear(),now.getMonth()+i,1);
+    const o=document.createElement('option');
+    o.textContent=MONTHS[d.getMonth()]+' '+d.getFullYear();
+    periodSel.appendChild(o);
+  }
+}
 const formatSel=document.getElementById('formatSel'),locField=document.getElementById('locField');
 formatSel.addEventListener('change',()=>{
   locField.classList.toggle('hidden',formatSel.value==='Онлайн міні-гра');
