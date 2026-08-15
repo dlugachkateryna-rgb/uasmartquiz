@@ -382,19 +382,17 @@ h2.sec-title em{font-style:normal;color:var(--purple2)}
 }
 .member:hover{transform:translateY(-12px) rotate(var(--r,0deg));border-color:var(--yellow)}
 .member .ava{
-  width:150px;height:150px;margin:0 auto 20px;
-  border-radius:var(--blob,64% 36% 58% 42% / 44% 60% 40% 56%);
-  background:radial-gradient(circle at 35% 30%,#ffe873,var(--yellow));
-  padding:5px;box-shadow:0 14px 40px rgba(255,209,0,.3);
-  transition:transform .5s,border-radius .6s;
-  animation:blobWobble 9s ease-in-out infinite;
+  height:200px;margin:0 auto 20px;
+  display:flex;align-items:center;justify-content:center;
+  transition:transform .5s;
 }
-.member .ava img{width:100%;height:100%;object-fit:cover;border-radius:inherit}
-@keyframes blobWobble{
-  0%,100%{border-radius:var(--blob,58% 42% 55% 45% / 52% 58% 42% 48%)}
-  50%{border-radius:var(--blob2,45% 55% 48% 52% / 58% 45% 55% 42%)}
+.member .ava img{
+  max-height:100%;max-width:100%;width:auto;
+  filter:drop-shadow(0 12px 34px rgba(255,209,0,.28));
+  animation:avaFloat 6s ease-in-out infinite;
 }
-.member:hover .ava{transform:scale(1.1) rotate(8deg)}
+@keyframes avaFloat{0%,100%{transform:translateY(0) rotate(-1.5deg)}50%{transform:translateY(-8px) rotate(1.5deg)}}
+.member:hover .ava{transform:scale(1.08) rotate(4deg)}
 .member h3{font-size:22px;margin-bottom:6px}
 .member .role{font-family:'Caveat';font-size:24px;color:var(--purple2)}
 .member p{margin-top:12px;color:var(--muted);font-size:14.5px;line-height:1.6}
@@ -733,19 +731,19 @@ footer .script{color:var(--yellow);font-size:24px;display:block;margin-bottom:8p
   <h2 class="sec-title" style="text-align:center">Три мозки <em>за веселощами</em></h2>
   <div class="team">
     <div class="member reveal" style="--r:2deg">
-      <div class="ava" style="--blob:67% 33% 61% 39% / 41% 63% 37% 59%;--blob2:42% 58% 35% 65% / 60% 38% 62% 40%"><img src="photos/team-katya.jpg" alt="Katya"></div>
+      <div class="ava"><img src="photos/blob-katya.png" alt="Katya"></div>
       <h3>Katya</h3>
       <div class="role">душа команди</div>
       <p>Тримає атмосферу, зустрічає гостей і робить так, щоб усі почувалися своїми.</p>
     </div>
     <div class="member reveal" style="--r:-1.5deg">
-      <div class="ava" style="--blob:38% 62% 55% 45% / 64% 36% 60% 40%;--blob2:62% 38% 42% 58% / 38% 64% 40% 60%"><img src="photos/team-roman.jpg" alt="Roman"></div>
+      <div class="ava"><img src="photos/blob-roman.png" alt="Roman"></div>
       <h3>Roman</h3>
       <div class="role">майстер шоу</div>
       <p>Відповідає за драйв, музику та той самий момент «вау» на кожному івенті.</p>
     </div>
     <div class="member reveal" style="--r:-2deg">
-      <div class="ava" style="--blob:59% 41% 36% 64% / 43% 62% 38% 57%;--blob2:36% 64% 60% 40% / 62% 40% 58% 42%"><img src="photos/team-kate.jpg" alt="Kate"></div>
+      <div class="ava"><img src="photos/blob-kate.png" alt="Kate"></div>
       <h3>Kate</h3>
       <div class="role">генератор ідей</div>
       <p>Вигадує теми, від яких неможливо відмовитися, і стежить, щоб кожна гра була особливою.</p>
