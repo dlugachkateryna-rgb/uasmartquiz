@@ -582,6 +582,7 @@ function duckSVG(st){
   const pose = find(POSES, st.pose);
   const eyes = find(EYES, st.eyes);
   return `
+  <defs><clipPath id="bodyClip"><ellipse cx="210" cy="392" rx="101" ry="83"/></clipPath></defs>
   ${back.svg}
   <g transform="rotate(${pose.tilt} 210 300)">
     <!-- лапки -->
@@ -590,8 +591,8 @@ function duckSVG(st){
     <!-- тіло -->
     <ellipse cx="210" cy="392" rx="106" ry="88" fill="${body.main}" stroke="${OUTLINE}" stroke-width="${SW}"/>
     <ellipse cx="176" cy="368" rx="46" ry="34" fill="${body.light}" opacity=".55"/>
-    <!-- одяг -->
-    ${find(CLOTHES, st.clothes).svg}
+    <!-- одяг (обрізаний по формі тіла) -->
+    <g clip-path="url(#bodyClip)">${find(CLOTHES, st.clothes).svg}</g>
     <!-- крила -->
     <path d="${pose.wingL}" fill="${body.main}" stroke="${OUTLINE}" stroke-width="${SW}" stroke-linejoin="round"/>
     <path d="${pose.wingR}" fill="${body.main}" stroke="${OUTLINE}" stroke-width="${SW}" stroke-linejoin="round"/>
@@ -601,7 +602,7 @@ function duckSVG(st){
     <path d="M196 66 q4 -46 22 -60 q-4 34 10 52 q16 -18 30 -22 q-16 22 -12 46 z"
       fill="${body.main}" stroke="${OUTLINE}" stroke-width="${SW}" stroke-linejoin="round"/>
     <ellipse cx="210" cy="196" rx="140" ry="132" fill="${body.main}" stroke="${OUTLINE}" stroke-width="${SW}"/>
-    <path d="M300 96 q46 34 46 92" fill="none" stroke="${body.light}" stroke-width="15" stroke-linecap="round" opacity=".75"/>
+    <path d="M292 84 q54 32 58 88" fill="none" stroke="${body.light}" stroke-width="16" stroke-linecap="round" opacity=".7"/>
     <!-- дзьоб -->
     <path d="M210 236 q-46 6 -56 26 q-4 34 56 40 q60 -6 56 -40 q-10 -20 -56 -26 z"
       fill="#ef8a26" stroke="${OUTLINE}" stroke-width="${SW}" stroke-linejoin="round"/>
