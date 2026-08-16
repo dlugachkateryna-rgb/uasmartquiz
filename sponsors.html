@@ -16,17 +16,11 @@
 }
 *{margin:0;padding:0;box-sizing:border-box}
 html{scroll-behavior:smooth;overflow-x:hidden}
-body{background:var(--bg);color:var(--white);font-family:'Rubik',sans-serif;overflow-x:hidden;cursor:none}
-@media (hover:none),(max-width:820px){ body{cursor:auto} }
+body{background:var(--bg);color:var(--white);font-family:'Rubik',sans-serif;overflow-x:hidden}
 img{max-width:100%;display:block}
 a{color:inherit;text-decoration:none}
 h1,h2,h3{font-family:'Unbounded',sans-serif}
 .script{font-family:'Caveat',cursive}
-
-#duckCursor{position:fixed;top:0;left:0;z-index:9999;pointer-events:none;width:34px;height:30px;
-  transform:translate(-50%,-50%);transition:transform .08s ease-out;filter:drop-shadow(0 2px 6px rgba(0,0,0,.5))}
-#duckCursor img{width:100%;height:100%}
-@media (hover:none),(max-width:820px){ #duckCursor{display:none} }
 
 nav{position:fixed;top:0;left:0;right:0;z-index:900;display:flex;align-items:center;justify-content:space-between;
   padding:14px 5vw;background:rgba(12,10,16,.55);backdrop-filter:blur(14px);border-bottom:1px solid rgba(255,209,0,.12)}
@@ -64,8 +58,7 @@ nav .links a.active:hover{transform:rotate(2deg)}
 #mobileMenu a:active,#mobileMenu a.active{background:var(--yellow);color:#131313}
 
 .btn{display:inline-flex;align-items:center;gap:10px;padding:16px 34px;border-radius:60px;font-weight:700;font-size:16px;
-  transition:transform .25s,box-shadow .25s,background .25s;cursor:none;border:none}
-@media (hover:none),(max-width:820px){ .btn{cursor:pointer} }
+  transition:transform .25s,box-shadow .25s,background .25s;cursor:pointer;border:none}
 .btn-yellow{background:var(--yellow);color:#141414;box-shadow:0 8px 30px rgba(255,209,0,.35)}
 .btn-yellow:hover{transform:translateY(-4px) scale(1.03);box-shadow:0 14px 40px rgba(255,209,0,.5)}
 .btn-ghost{border:2px solid var(--purple);color:var(--purple2)}
@@ -154,8 +147,6 @@ footer .script{color:var(--yellow);font-size:24px;display:block;margin-bottom:8p
 </style>
 </head>
 <body>
-
-<div id="duckCursor"><img src="photos/duck.png" alt=""></div>
 
 <nav>
   <a class="brand" href="index.html">
@@ -265,17 +256,6 @@ footer .script{color:var(--yellow);font-size:24px;display:block;margin-bottom:8p
 </footer>
 
 <script>
-// duck cursor
-const duck=document.getElementById('duckCursor');
-let dx=innerWidth/2,dy=innerHeight/2,tx=dx,ty=dy;
-addEventListener('mousemove',e=>{tx=e.clientX;ty=e.clientY;});
-(function moveDuck(){
-  dx+=(tx-dx)*.18; dy+=(ty-dy)*.18;
-  duck.style.left=dx+'px'; duck.style.top=dy+'px';
-  duck.style.transform=`translate(-50%,-50%) rotate(${(tx-dx)*.6}deg) scaleX(${tx>dx?1:-1})`;
-  requestAnimationFrame(moveDuck);
-})();
-
 // reveal
 const io=new IntersectionObserver(es=>es.forEach(e=>{
   if(e.isIntersecting){e.target.classList.add('on');io.unobserve(e.target);}

@@ -27,23 +27,11 @@ body{
   color:var(--white);
   font-family:'Rubik',sans-serif;
   overflow-x:hidden;
-  cursor:none;
 }
-@media (hover:none),(max-width:820px){ body{cursor:auto} }
 img{max-width:100%;display:block}
 a{color:inherit;text-decoration:none}
 h1,h2,h3{font-family:'Unbounded',sans-serif}
 .script{font-family:'Caveat',cursive}
-
-/* ---------- duck cursor ---------- */
-#duckCursor{
-  position:fixed;top:0;left:0;z-index:9999;pointer-events:none;
-  width:34px;height:30px;transform:translate(-50%,-50%);
-  transition:transform .08s ease-out;
-  filter:drop-shadow(0 2px 6px rgba(0,0,0,.5));
-}
-#duckCursor img{width:100%;height:100%}
-@media (hover:none),(max-width:820px){ #duckCursor{display:none} }
 
 /* ---------- preloader ---------- */
 #loader{
@@ -155,9 +143,8 @@ nav .links a.active:hover{transform:rotate(2deg)}
 .btn{
   display:inline-flex;align-items:center;gap:10px;
   padding:16px 34px;border-radius:60px;font-weight:700;font-size:16px;
-  transition:transform .25s,box-shadow .25s,background .25s;cursor:none;border:none;
+  transition:transform .25s,box-shadow .25s,background .25s;cursor:pointer;border:none;
 }
-@media (hover:none),(max-width:820px){ .btn{cursor:pointer} }
 .btn-yellow{background:var(--yellow);color:#141414;box-shadow:0 8px 30px rgba(255,209,0,.35)}
 .btn-yellow:hover{transform:translateY(-4px) scale(1.03);box-shadow:0 14px 40px rgba(255,209,0,.5)}
 .btn-ghost{border:2px solid var(--purple);color:var(--purple2)}
@@ -217,15 +204,32 @@ h2.sec-title em{font-style:normal;color:var(--purple2)}
 @media(max-width:900px){.photo-stack{height:380px}}
 
 /* counters */
-.counters{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;margin-top:70px}
-@media(max-width:900px){.counters{grid-template-columns:repeat(2,1fr)}}
-.counter{
-  background:var(--bg2);border:1px solid rgba(139,92,246,.25);border-radius:22px;
-  padding:30px 16px;text-align:center;transition:transform .3s,border-color .3s;
+.counters{display:grid;grid-template-columns:repeat(5,1fr);gap:16px;margin-top:70px}
+.counter:nth-child(2){grid-column:span 2}
+@media(max-width:900px){
+  .counters{grid-template-columns:repeat(2,1fr)}
+  .counter:nth-child(2){grid-column:span 1}
 }
-.counter:hover{transform:translateY(-8px) rotate(-1deg);border-color:var(--yellow)}
-.counter .num{font-family:'Unbounded';font-weight:900;font-size:clamp(30px,4vw,48px);color:var(--yellow)}
-.counter .lbl{color:var(--muted);margin-top:8px;font-size:15px}
+.counter{
+  position:relative;overflow:hidden;
+  background:var(--bg2);border:1px solid rgba(139,92,246,.25);border-radius:22px;
+  padding:26px 18px 22px;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;text-align:center;min-height:150px;
+  transition:transform .35s,border-color .35s,background .35s;
+}
+.counter::after{
+  content:"";position:absolute;top:0;left:22%;right:22%;height:3px;
+  background:var(--yellow);border-radius:0 0 4px 4px;
+  transform:scaleX(0);transition:transform .4s cubic-bezier(.2,.8,.2,1);
+}
+.counter:hover{transform:translateY(-8px) rotate(-1deg);border-color:var(--yellow);background:#191527}
+.counter:hover::after{transform:scaleX(1)}
+.counter .num{
+  font-family:'Unbounded';font-weight:900;font-size:clamp(32px,3.6vw,46px);
+  color:var(--yellow);line-height:1;transition:transform .35s;
+}
+.counter:hover .num{transform:scale(1.08)}
+.counter .lbl{color:var(--muted);margin-top:12px;font-size:14.5px;line-height:1.45;max-width:220px}
 
 /* formats cards */
 .cards{display:grid;grid-template-columns:repeat(4,1fr);gap:22px}
@@ -252,11 +256,21 @@ h2.sec-title em{font-style:normal;color:var(--purple2)}
 
 /* why */
 .why-grid{
-  display:grid;grid-template-columns:repeat(3,1fr);gap:18px;
-  grid-auto-rows:minmax(200px,auto);
+  display:grid;grid-template-columns:repeat(6,1fr);gap:18px;
+  grid-auto-rows:minmax(210px,auto);
 }
-@media(max-width:900px){.why-grid{grid-template-columns:repeat(2,1fr)}}
-@media(max-width:560px){.why-grid{grid-template-columns:1fr}}
+.why-card{grid-column:span 2}
+.why-card:nth-child(4),.why-card:nth-child(5){grid-column:span 3}
+@media(max-width:900px){
+  .why-grid{grid-template-columns:repeat(2,1fr)}
+  .why-card{grid-column:span 1}
+  .why-card:nth-child(4),.why-card:nth-child(5){grid-column:span 1}
+  .why-card:nth-child(5){grid-column:span 2}
+}
+@media(max-width:560px){
+  .why-grid{grid-template-columns:1fr}
+  .why-card,.why-card:nth-child(4),.why-card:nth-child(5){grid-column:span 1}
+}
 .why-card{
   position:relative;overflow:hidden;
   background:var(--bg2);border:1px solid rgba(255,255,255,.08);
@@ -265,8 +279,6 @@ h2.sec-title em{font-style:normal;color:var(--purple2)}
   transition:transform .4s cubic-bezier(.2,.8,.2,1),border-color .4s,background .4s;
 }
 .why-card > *{position:relative;z-index:1}
-.why-card.wide{grid-column:span 2}
-@media(max-width:560px){.why-card.wide{grid-column:span 1}}
 .why-card:hover{transform:translateY(-10px) rotate(-.8deg);border-color:var(--yellow);background:#191527}
 .why-card::before{
   content:attr(data-n);position:absolute;top:-34px;right:6px;z-index:0;
@@ -307,9 +319,8 @@ h2.sec-title em{font-style:normal;color:var(--purple2)}
   font-family:'Rubik';font-size:16px;text-align:left;
   padding:16px 20px;border-radius:16px;border:2px solid rgba(255,255,255,.14);
   background:rgba(255,255,255,.04);color:var(--white);
-  transition:all .25s;cursor:none;
+  transition:all .25s;cursor:pointer;
 }
-@media (hover:none),(max-width:820px){ .answers button{cursor:pointer} }
 .answers button:hover{border-color:var(--yellow);background:rgba(255,209,0,.1);transform:translateY(-3px)}
 .answers button.good{background:var(--yellow);color:#131313;border-color:var(--yellow);font-weight:700}
 .answers button.bad{background:rgba(255,94,168,.25);border-color:var(--pink)}
@@ -331,9 +342,9 @@ h2.sec-title em{font-style:normal;color:var(--purple2)}
 .gal-row img{
   height:250px;width:auto;border-radius:16px;
   transition:transform .4s,filter .4s;filter:saturate(.92);
-  cursor:none;
+  cursor:pointer;
 }
-@media (hover:none),(max-width:820px){ .gal-row img{cursor:pointer;height:180px} }
+@media (max-width:820px){ .gal-row img{height:180px} }
 .gal-row img:hover{transform:scale(1.07) rotate(-1.5deg);filter:saturate(1.15);box-shadow:0 18px 50px rgba(0,0,0,.6);z-index:2;position:relative}
 
 /* lightbox */
@@ -354,9 +365,8 @@ h2.sec-title em{font-style:normal;color:var(--purple2)}
 .vopt{
   position:relative;background:var(--bg2);border-radius:22px;padding:56px 20px 26px;
   border:2px solid rgba(255,255,255,.1);text-align:center;
-  transition:transform .35s,border-color .35s,background .35s;cursor:none;
+  transition:transform .35s,border-color .35s,background .35s;cursor:pointer;
 }
-@media (hover:none),(max-width:820px){ .vopt{cursor:pointer} }
 .vopt:hover{transform:translateY(-10px) rotate(-1deg);border-color:var(--yellow);background:#191527}
 .vopt .letter{
   position:absolute;top:14px;left:14px;width:34px;height:34px;border-radius:50%;
@@ -413,12 +423,12 @@ h2.sec-title em{font-style:normal;color:var(--purple2)}
 @media(max-width:900px){.crew-collage{columns:2}}
 @media(max-width:540px){.crew-collage{columns:1}}
 .crew-collage img{
-  width:100%;border-radius:16px;margin-bottom:16px;
-  border:4px solid #fff;box-shadow:0 14px 40px rgba(0,0,0,.5);
-  transition:transform .4s,box-shadow .4s;cursor:none;
+  width:100%;height:auto;border-radius:16px;margin-bottom:16px;
+  border:4px solid #fff;background:var(--bg2);
+  box-shadow:0 14px 40px rgba(0,0,0,.5);
+  transition:transform .4s,box-shadow .4s;cursor:pointer;
   break-inside:avoid;
 }
-@media (hover:none),(max-width:820px){ .crew-collage img{cursor:pointer} }
 .crew-collage img:nth-child(odd){transform:rotate(-1.4deg)}
 .crew-collage img:nth-child(even){transform:rotate(1.4deg)}
 .crew-collage img:hover{transform:rotate(0) scale(1.05);box-shadow:0 24px 60px rgba(0,0,0,.7);position:relative;z-index:3}
@@ -535,8 +545,6 @@ footer .script{color:var(--yellow);font-size:24px;display:block;margin-bottom:8p
 </head>
 <body>
 
-<div id="duckCursor"><img src="photos/duck.png" alt=""></div>
-
 <div id="loader">
   <img class="duck" src="photos/duck.png" alt="">
   <p>Кря-кря... завантажуємо веселощі</p>
@@ -602,16 +610,16 @@ footer .script{color:var(--yellow);font-size:24px;display:block;margin-bottom:8p
       <p>Чи це твої студенти, команда, день народження або волонтери - ми подбаємо, щоб усі <span class="hl">веселилися, швидко думали та знайомилися</span>.</p>
       <p>Не треба бути генієм, щоб грати - наш квіз <b>для всіх</b>! Ми змішуємо знання, музику, кіно, логіку та фан-челенджі. Різні голови = кращі ідеї = більше веселощів.</p>
       <div class="counters">
-        <div class="counter reveal"><div class="num" data-count="2">0</div><div class="lbl">роки запальних квізів</div></div>
+        <div class="counter reveal"><div class="num" data-count="2">0</div><div class="lbl">роки досвіду</div></div>
         <div class="counter reveal"><div class="num">∞</div><div class="lbl">весь Ізраїль офлайн + весь світ онлайн</div></div>
-        <div class="counter reveal"><div class="num" data-count="7">0</div><div class="lbl">раундів за гру</div></div>
+        <div class="counter reveal"><div class="num" data-count="3">0</div><div class="lbl">мозки організаторів</div></div>
         <div class="counter reveal"><div class="num" data-count="100" data-suffix="%">0</div><div class="lbl">гарантія «кря»</div></div>
       </div>
     </div>
     <div class="photo-stack reveal">
-      <img src="photos/crowd-cheer.jpg" alt="Натовп радіє на квізі">
-      <img src="photos/ducks-table.jpg" alt="Гумові качечки - наш маскот">
-      <img src="photos/team-thinking.jpg" alt="Команда обговорює відповідь">
+      <img src="photos/big-group.jpg" alt="Велика команда гравців на квізі">
+      <img src="photos/crowd-lights.jpg" alt="Повний зал гравців">
+      <img src="photos/balloons-group.jpg" alt="Група гравців на святковому квізі">
     </div>
   </div>
 </section>
@@ -647,7 +655,7 @@ footer .script{color:var(--yellow);font-size:24px;display:block;margin-bottom:8p
   <span class="sec-label">чому це працює?</span>
   <h2 class="sec-title">5 причин <em>закохатися в квіз</em></h2>
   <div class="why-grid">
-    <div class="why-card wide reveal" data-n="1">
+    <div class="why-card reveal" data-n="1">
       <span class="badge">01</span>
       <span class="wic"><svg viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.4"/><path d="M2.5 21c.5-4.5 3.5-6.8 6.5-6.8s6 2.3 6.5 6.8"/><circle cx="17.5" cy="7" r="2.6"/><path d="M16.5 13.5c2.8.3 4.6 2.3 5 6"/></svg></span>
       <h3>Командний дух і нетворкінг</h3>
@@ -671,7 +679,7 @@ footer .script{color:var(--yellow);font-size:24px;display:block;margin-bottom:8p
       <h3>Динамічні раунди</h3>
       <p>Формат змінюється щоп'ятнадцять хвилин - нудьгувати ніколи.</p>
     </div>
-    <div class="why-card wide reveal" data-n="5">
+    <div class="why-card reveal" data-n="5">
       <span class="badge">05</span>
       <span class="wic"><svg viewBox="0 0 24 24"><path d="M7.5 3.5h9v5a4.5 4.5 0 0 1-9 0z"/><path d="M7.5 5H4.8v1.4a3.4 3.4 0 0 0 2.9 3.3M16.5 5h2.7v1.4a3.4 3.4 0 0 1-2.9 3.3"/><path d="M12 13v3.5M8.6 20.5h6.8l-.7-4H9.3z"/></svg></span>
       <h3>Реальні призи для переможців</h3>
@@ -801,14 +809,14 @@ footer .script{color:var(--yellow);font-size:24px;display:block;margin-bottom:8p
     </div>
   </div>
   <div class="crew-collage reveal">
-    <img src="photos/crew-8.jpg" alt="Команда UA Smart Quiz" loading="lazy">
-    <img src="photos/crew-3.jpg" alt="Команда за роботою" loading="lazy">
-    <img src="photos/crew-1.jpg" alt="Roma і Katya" loading="lazy">
-    <img src="photos/crew-4.jpg" alt="Команда за пультом" loading="lazy">
-    <img src="photos/crew-5.jpg" alt="Roma і Kate" loading="lazy">
-    <img src="photos/crew-2.jpg" alt="Налаштування проєктора" loading="lazy">
-    <img src="photos/crew-7.jpg" alt="Roma і Kate на грі" loading="lazy">
-    <img src="photos/crew-6.jpg" alt="Roma і Kate з ноутбуком" loading="lazy">
+    <img src="photos/crew-8.jpg" alt="Команда UA Smart Quiz" loading="lazy" width="1200" height="900">
+    <img src="photos/crew-3.jpg" alt="Команда за роботою" loading="lazy" width="1200" height="800">
+    <img src="photos/crew-1.jpg" alt="Roma і Katya" loading="lazy" width="800" height="1200">
+    <img src="photos/crew-4.jpg" alt="Команда за пультом" loading="lazy" width="1200" height="801">
+    <img src="photos/crew-5.jpg" alt="Roma і Kate" loading="lazy" width="1200" height="801">
+    <img src="photos/crew-2.jpg" alt="Налаштування проєктора" loading="lazy" width="1200" height="801">
+    <img src="photos/crew-7.jpg" alt="Roma і Kate на грі" loading="lazy" width="1200" height="801">
+    <img src="photos/crew-6.jpg" alt="Roma і Kate з ноутбуком" loading="lazy" width="1200" height="801">
   </div>
 </section>
 
@@ -901,17 +909,6 @@ footer .script{color:var(--yellow);font-size:24px;display:block;margin-bottom:8p
 // ---------- preloader ----------
 window.addEventListener('load',()=>{ setTimeout(()=>document.getElementById('loader').classList.add('hide'),500); });
 setTimeout(()=>document.getElementById('loader').classList.add('hide'),3500);
-
-// ---------- duck cursor ----------
-const duck=document.getElementById('duckCursor');
-let dx=innerWidth/2,dy=innerHeight/2,tx=dx,ty=dy;
-addEventListener('mousemove',e=>{tx=e.clientX;ty=e.clientY;});
-(function moveDuck(){
-  dx+=(tx-dx)*.18; dy+=(ty-dy)*.18;
-  duck.style.left=dx+'px'; duck.style.top=dy+'px';
-  duck.style.transform=`translate(-50%,-50%) rotate(${(tx-dx)*.6}deg) scaleX(${tx>dx?1:-1})`;
-  requestAnimationFrame(moveDuck);
-})();
 
 // ---------- marquee content ----------
 const words=['UA SMART QUIZ','ТЕМАТИЧНІ КВІЗИ','КОРПОРАТИВИ','ПРИВАТНІ ІВЕНТИ','КРЯ!'];
