@@ -101,11 +101,29 @@ section{padding:30px 5vw 90px;position:relative;max-width:1300px;margin:0 auto}
 .stage-btns .btn{flex:1;min-width:130px}
 
 /* ---------- controls ---------- */
-.controls{display:flex;flex-direction:column;gap:20px}
-.cat{background:var(--bg2);border:1px solid rgba(255,255,255,.08);border-radius:22px;padding:20px 20px 22px}
-.cat-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:14px}
-.cat-head h3{font-size:15px;letter-spacing:.3px}
-.cat-head .count{font-size:12.5px;color:var(--muted)}
+.controls{background:var(--bg2);border:1px solid rgba(255,255,255,.08);border-radius:26px;padding:20px}
+.tabs{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+@media(min-width:1180px){.tabs{grid-template-columns:repeat(8,1fr)}}
+@media(max-width:420px){.tabs{grid-template-columns:repeat(3,1fr)}}
+.tab{
+  position:relative;aspect-ratio:1;border-radius:20px;
+  background:rgba(255,255,255,.05);border:2px solid rgba(255,255,255,.12);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;
+  cursor:pointer;transition:all .25s;padding:8px;
+}
+.tab:hover{border-color:rgba(255,209,0,.6);background:rgba(255,209,0,.08);transform:translateY(-3px)}
+.tab.on{background:var(--yellow);border-color:var(--yellow);transform:translateY(-3px) rotate(-2deg);
+  box-shadow:0 8px 24px rgba(255,209,0,.34)}
+.tab svg{width:60%;max-width:44px;height:auto;fill:none;stroke:var(--yellow);
+  stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;transition:stroke .25s}
+.tab.on svg{stroke:#131313}
+.tab .tname{font-size:10.5px;font-weight:600;color:var(--muted);text-align:center;line-height:1.2;transition:color .25s}
+.tab.on .tname{color:#131313}
+
+.panel{margin-top:20px;border-top:1px solid rgba(255,255,255,.09);padding-top:20px}
+.panel-head{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin-bottom:14px}
+.panel-head h3{font-size:16px}
+.panel-head .count{font-size:12.5px;color:var(--muted)}
 .opts-row{display:flex;flex-wrap:wrap;gap:9px}
 .opt{
   background:rgba(255,255,255,.05);border:2px solid rgba(255,255,255,.12);
@@ -114,7 +132,7 @@ section{padding:30px 5vw 90px;position:relative;max-width:1300px;margin:0 auto}
 }
 .opt:hover{border-color:rgba(255,209,0,.6);background:rgba(255,209,0,.08);transform:translateY(-2px)}
 .opt.on{background:var(--yellow);color:#131313;border-color:var(--yellow);font-weight:700}
-.swatch{width:38px;height:38px;border-radius:12px;padding:0;border-width:3px}
+.swatch{width:40px;height:40px;border-radius:13px;padding:0;border-width:3px}
 .swatch.on{transform:scale(1.12) rotate(-6deg)}
 
 .dice{margin-top:6px}
@@ -306,28 +324,6 @@ function stars(){
   return r;
 }
 
-/* ---------- пози (крила + нахил) ---------- */
-const POSES = [
-  {id:'stand', name:'Спокійна', tilt:0,
-   wingL:'M96 372 q-46 -20 -52 18 q-4 40 44 44 q22 -30 8 -62 z',
-   wingR:'M324 372 q46 -20 52 18 q4 40 -44 44 q-22 -30 -8 -62 z'},
-  {id:'hi', name:'Привіт', tilt:-5,
-   wingL:'M96 372 q-52 -6 -56 34 q0 38 46 38 q20 -34 10 -72 z',
-   wingR:'M322 356 q40 -56 74 -34 q30 22 -6 62 q-38 12 -68 -28 z'},
-  {id:'dance', name:'Танець', tilt:6,
-   wingL:'M98 356 q-42 -56 -74 -32 q-28 24 8 62 q38 10 66 -30 z',
-   wingR:'M322 356 q42 -56 74 -32 q28 24 -8 62 q-38 10 -66 -30 z'},
-  {id:'think', name:'Думає', tilt:-8,
-   wingL:'M96 372 q-46 -20 -52 18 q-4 40 44 44 q22 -30 8 -62 z',
-   wingR:'M320 366 q34 -30 44 4 q8 32 -34 40 q-24 -18 -10 -44 z'},
-  {id:'selfie', name:'Селфі', tilt:7,
-   wingL:'M100 368 q-30 -34 -58 -6 q-24 26 14 54 q34 4 44 -48 z',
-   wingR:'M324 372 q46 -20 52 18 q4 40 -44 44 q-22 -30 -8 -62 z'},
-  {id:'win', name:'Перемога', tilt:0,
-   wingL:'M98 352 q-30 -66 -66 -44 q-32 22 -2 64 q34 16 68 -20 z',
-   wingR:'M322 352 q30 -66 66 -44 q32 22 2 64 q-34 16 -68 -20 z'},
-];
-
 /* ---------- очі ---------- */
 const EYES = [
   {id:'normal', name:'Звичайні', svg:eyePair(`<circle cx="0" cy="0" r="17" fill="#3a2312"/><circle cx="6" cy="-6" r="6" fill="#fff"/>`)},
@@ -439,37 +435,51 @@ const GLASSES = [
 const CLOTHES = [
   {id:'none', name:'Без одягу', svg:''},
   {id:'tshirt', name:'Футболка', svg:`
-    <path d="M124 352 q86 -34 172 0 v112 q-86 22 -172 0 z" fill="#4dc3ff" stroke="${OUTLINE}" stroke-width="${SW}" stroke-linejoin="round"/>
-    <path d="M176 348 q34 26 68 0" fill="none" stroke="${OUTLINE}" stroke-width="9"/>`},
+    <path d="M80 340 q56 26 90 26 q22 0 40 -16 q18 16 40 16 q34 0 90 -26 L340 520 L80 520 Z"
+      fill="#4dc3ff" stroke="${OUTLINE}" stroke-width="${SW}" stroke-linejoin="round"/>`},
   {id:'vyshyvanka', name:'Вишиванка', svg:`
-    <path d="M124 352 q86 -34 172 0 v112 q-86 22 -172 0 z" fill="#fbf6ea" stroke="${OUTLINE}" stroke-width="${SW}" stroke-linejoin="round"/>
-    <path d="M176 348 q34 26 68 0" fill="none" stroke="${OUTLINE}" stroke-width="9"/>
-    ${[380,404,428].map(y=>`<path d="M132 ${y} h156" stroke="#e0483c" stroke-width="7" stroke-dasharray="12 10"/>`).join('')}
-    <path d="M150 396 l12 -14 l12 14 l-12 14 z M246 396 l12 -14 l12 14 l-12 14 z" fill="#4a7de0" stroke="${OUTLINE}" stroke-width="4"/>`},
+    <path d="M80 340 q56 26 90 26 q22 0 40 -16 q18 16 40 16 q34 0 90 -26 L340 520 L80 520 Z"
+      fill="#fbf6ea" stroke="${OUTLINE}" stroke-width="${SW}" stroke-linejoin="round"/>
+    <path d="M80 396 h260 M80 428 h260" stroke="#e0483c" stroke-width="8" stroke-dasharray="13 11"/>
+    ${[140,180,220,260].map(x=>`<path d="M${x} 462 l13 -15 l13 15 l-13 15 z" fill="#4a7de0" stroke="${OUTLINE}" stroke-width="4"/>`).join('')}`},
   {id:'tux', name:'Смокінг', svg:`
-    <path d="M124 352 q86 -34 172 0 v112 q-86 22 -172 0 z" fill="#2f2a3d" stroke="${OUTLINE}" stroke-width="${SW}" stroke-linejoin="round"/>
-    <path d="M180 344 L210 400 L240 344 L240 460 L180 460 Z" fill="#fff" stroke="${OUTLINE}" stroke-width="8" stroke-linejoin="round"/>
-    <circle cx="210" cy="424" r="6" fill="${OUTLINE}"/>`},
+    <path d="M80 340 q56 26 90 26 q22 0 40 -16 q18 16 40 16 q34 0 90 -26 L340 520 L80 520 Z"
+      fill="#2f2a3d" stroke="${OUTLINE}" stroke-width="${SW}" stroke-linejoin="round"/>
+    <path d="M168 356 L210 424 L252 356 L252 520 L168 520 Z" fill="#fff8f0" stroke="${OUTLINE}" stroke-width="8" stroke-linejoin="round"/>
+    <circle cx="210" cy="452" r="7" fill="${OUTLINE}"/><circle cx="210" cy="486" r="7" fill="${OUTLINE}"/>`},
   {id:'hoodie', name:'Худі', svg:`
-    <path d="M118 356 q92 -38 184 0 v110 q-92 22 -184 0 z" fill="#8b5cf6" stroke="${OUTLINE}" stroke-width="${SW}" stroke-linejoin="round"/>
-    <path d="M166 348 q44 40 88 0 q6 30 -44 34 q-50 -4 -44 -34 z" fill="#7247e0" stroke="${OUTLINE}" stroke-width="9" stroke-linejoin="round"/>
-    <path d="M196 384 v40 M224 384 v40" stroke="#fff" stroke-width="7" stroke-linecap="round"/>`},
+    <path d="M76 344 q60 26 94 26 q22 0 40 -16 q18 16 40 16 q34 0 94 -26 L344 520 L76 520 Z"
+      fill="#8b5cf6" stroke="${OUTLINE}" stroke-width="${SW}" stroke-linejoin="round"/>
+    <path d="M158 350 q52 44 104 0 q6 34 -52 38 q-58 -4 -52 -38 z" fill="#7247e0" stroke="${OUTLINE}" stroke-width="9" stroke-linejoin="round"/>
+    <path d="M188 392 v46 M232 392 v46" stroke="#fff" stroke-width="8" stroke-linecap="round" opacity=".9"/>
+    <path d="M150 446 q60 22 120 0" fill="none" stroke="#7247e0" stroke-width="10"/>`},
   {id:'stripes', name:'Тільняшка', svg:`
-    <path d="M124 352 q86 -34 172 0 v112 q-86 22 -172 0 z" fill="#f4f0e6" stroke="${OUTLINE}" stroke-width="${SW}" stroke-linejoin="round"/>
-    ${[366,388,410,432,454].map(y=>`<path d="M126 ${y} q84 12 168 0" stroke="#2f5da8" stroke-width="12" fill="none"/>`).join('')}`},
+    <path d="M80 340 q56 26 90 26 q22 0 40 -16 q18 16 40 16 q34 0 90 -26 L340 520 L80 520 Z"
+      fill="#f4f0e6" stroke="${OUTLINE}" stroke-width="${SW}" stroke-linejoin="round"/>
+    ${[382,410,438,466,494].map(y=>`<path d="M76 ${y} q134 16 268 0" stroke="#2f5da8" stroke-width="14" fill="none"/>`).join('')}`},
   {id:'cape', name:'Плащ героя', svg:`
-    <path d="M104 344 q106 -30 212 0 q26 92 -6 138 q-100 26 -200 0 q-32 -46 -6 -138 z"
+    <path d="M80 340 q56 26 90 26 q22 0 40 -16 q18 16 40 16 q34 0 90 -26 L340 520 L80 520 Z"
       fill="#e0483c" stroke="${OUTLINE}" stroke-width="${SW}" stroke-linejoin="round"/>
-    <path d="M210 350 l16 30 l-16 26 l-16 -26 z" fill="#ffd43b" stroke="${OUTLINE}" stroke-width="5"/>`},
+    <path d="M210 380 l20 38 l-20 34 l-20 -34 z" fill="#ffd43b" stroke="${OUTLINE}" stroke-width="6" stroke-linejoin="round"/>`},
   {id:'jacket', name:'Джинсовка', svg:`
-    <path d="M124 352 q86 -34 172 0 v112 q-86 22 -172 0 z" fill="#5c7fa8" stroke="${OUTLINE}" stroke-width="${SW}" stroke-linejoin="round"/>
-    <path d="M186 346 L210 372 L234 346" fill="none" stroke="${OUTLINE}" stroke-width="9"/>
-    <path d="M210 372 v92" stroke="${OUTLINE}" stroke-width="7"/>
-    <rect x="148" y="400" width="34" height="22" rx="4" fill="none" stroke="${OUTLINE}" stroke-width="6"/>
-    <rect x="238" y="400" width="34" height="22" rx="4" fill="none" stroke="${OUTLINE}" stroke-width="6"/>`},
+    <path d="M80 340 q56 26 90 26 q22 0 40 -16 q18 16 40 16 q34 0 90 -26 L340 520 L80 520 Z"
+      fill="#5c7fa8" stroke="${OUTLINE}" stroke-width="${SW}" stroke-linejoin="round"/>
+    <path d="M210 366 v154" stroke="${OUTLINE}" stroke-width="8"/>
+    <rect x="136" y="404" width="40" height="26" rx="5" fill="none" stroke="${OUTLINE}" stroke-width="7"/>
+    <rect x="244" y="404" width="40" height="26" rx="5" fill="none" stroke="${OUTLINE}" stroke-width="7"/>`},
   {id:'dress', name:'Сукня', svg:`
-    <path d="M136 352 q74 -30 148 0 l30 116 q-104 26 -208 0 z" fill="#ff6f9c" stroke="${OUTLINE}" stroke-width="${SW}" stroke-linejoin="round"/>
-    <path d="M126 428 q84 20 168 0" stroke="#fff" stroke-width="8" fill="none" opacity=".7"/>`},
+    <path d="M96 344 q48 24 74 24 q22 0 40 -16 q18 16 40 16 q26 0 74 -24 L344 520 L76 520 Z"
+      fill="#ff6f9c" stroke="${OUTLINE}" stroke-width="${SW}" stroke-linejoin="round"/>
+    <path d="M76 434 q134 24 268 0" stroke="#fff" stroke-width="9" fill="none" opacity=".75"/>`},
+  {id:'suit', name:'Піджак', svg:`
+    <path d="M80 340 q56 26 90 26 q22 0 40 -16 q18 16 40 16 q34 0 90 -26 L340 520 L80 520 Z"
+      fill="#3d5a80" stroke="${OUTLINE}" stroke-width="${SW}" stroke-linejoin="round"/>
+    <path d="M170 356 L210 430 L250 356 L250 520 L170 520 Z" fill="#e8e2d5" stroke="${OUTLINE}" stroke-width="8" stroke-linejoin="round"/>
+    <path d="M150 366 L188 424 M270 366 L232 424" stroke="${OUTLINE}" stroke-width="7" fill="none"/>`},
+  {id:'ua', name:'Синьо-жовта', svg:`
+    <path d="M80 340 q56 26 90 26 q22 0 40 -16 q18 16 40 16 q34 0 90 -26 L340 430 L80 430 Z"
+      fill="#4a7de0" stroke="${OUTLINE}" stroke-width="${SW}" stroke-linejoin="round"/>
+    <path d="M80 424 L340 424 L340 520 L80 520 Z" fill="#ffd43b" stroke="${OUTLINE}" stroke-width="${SW}" stroke-linejoin="round"/>`},
 ];
 
 /* ---------- прикраси на шию ---------- */
@@ -559,19 +569,31 @@ const PROPS = [
 
 /* ============================================================ */
 
+const ICONS = {
+  eyes:`<svg viewBox="0 0 24 24"><path d="M2.5 12s3.6-6.5 9.5-6.5S21.5 12 21.5 12s-3.6 6.5-9.5 6.5S2.5 12 2.5 12z"/><circle cx="12" cy="12" r="3.4"/></svg>`,
+  hat:`<svg viewBox="0 0 24 24"><path d="M7.5 4.5h9v11h-9z"/><path d="M3.5 15.5h17"/></svg>`,
+  glasses:`<svg viewBox="0 0 24 24"><circle cx="6.6" cy="13" r="4"/><circle cx="17.4" cy="13" r="4"/><path d="M10.6 12.4q1.4-1.2 2.8 0M2.6 11 4 8.6M21.4 11 20 8.6"/></svg>`,
+  clothes:`<svg viewBox="0 0 24 24"><path d="M9 3.5 5 6l-1.5 4L6 11v9.5h12V11l2.5-1L19 6l-4-2.5"/><path d="M9 3.5q3 3 6 0"/></svg>`,
+  neck:`<svg viewBox="0 0 24 24"><path d="M7 4q5 5 10 0"/><path d="M12 9l-4.5-2v5z"/><path d="M12 9l4.5-2v5z"/><circle cx="12" cy="9.4" r="1.8"/></svg>`,
+  prop:`<svg viewBox="0 0 24 24"><path d="M12 3.2l2.6 5.6 6 .8-4.4 4.1 1.2 6-5.4-3-5.4 3 1.2-6L3.4 9.6l6-.8z"/></svg>`,
+  body:`<svg viewBox="0 0 24 24"><path d="M12 3.5a8.5 8.5 0 1 0 0 17c1.3 0 2-.8 2-1.7s-.6-1.5-.6-2.3.7-1.5 1.6-1.5h1.6a4.4 4.4 0 0 0 4.4-4.4c0-4-4-7.1-9-7.1z"/><circle cx="7.6" cy="11.4" r="1.1"/><circle cx="11" cy="7.7" r="1.1"/><circle cx="15.4" cy="8.6" r="1.1"/></svg>`,
+  back:`<svg viewBox="0 0 24 24"><rect x="3" y="4.5" width="18" height="15" rx="2.5"/><circle cx="8.6" cy="10" r="1.8"/><path d="M3.6 17.4 9 12.4l4 3.6 3.2-2.6 4.2 4"/></svg>`,
+};
+
 const CATS = [
-  {key:'pose',    title:'Поза',        list:POSES},
-  {key:'eyes',    title:'Очі',         list:EYES},
-  {key:'hat',     title:'Головний убір', list:HATS},
-  {key:'glasses', title:'Окуляри',     list:GLASSES},
-  {key:'clothes', title:'Одяг',        list:CLOTHES},
-  {key:'neck',    title:'Прикраса на шию', list:NECK},
-  {key:'prop',    title:'Аксесуар',    list:PROPS},
-  {key:'body',    title:'Колір качечки', list:BODIES, swatch:true},
-  {key:'back',    title:'Фон',         list:BACKS},
+  {key:'eyes',    title:'Очі',           short:'Очі',      list:EYES},
+  {key:'hat',     title:'Головний убір', short:'Капелюх',  list:HATS},
+  {key:'glasses', title:'Окуляри',       short:'Окуляри',  list:GLASSES},
+  {key:'clothes', title:'Одяг',          short:'Одяг',     list:CLOTHES},
+  {key:'neck',    title:'Прикраса на шию', short:'Шия',    list:NECK},
+  {key:'prop',    title:'Аксесуар',      short:'Аксесуар', list:PROPS},
+  {key:'body',    title:'Колір качечки', short:'Колір',    list:BODIES, swatch:true},
+  {key:'back',    title:'Фон',           short:'Фон',      list:BACKS},
 ];
 
-let state = {pose:'stand', eyes:'normal', hat:'none', glasses:'none',
+let openCat = 'hat';
+
+let state = {eyes:'normal', hat:'none', glasses:'none',
              clothes:'none', neck:'none', prop:'none', body:'yellow', back:'sun'};
 
 const find = (list,id) => list.find(x=>x.id===id) || list[0];
@@ -579,41 +601,63 @@ const find = (list,id) => list.find(x=>x.id===id) || list[0];
 function duckSVG(st){
   const body = find(BODIES, st.body);
   const back = find(BACKS, st.back);
-  const pose = find(POSES, st.pose);
   const eyes = find(EYES, st.eyes);
   return `
-  <defs><clipPath id="bodyClip"><ellipse cx="210" cy="392" rx="101" ry="83"/></clipPath></defs>
+  <defs>
+    <clipPath id="bodyClip"><ellipse cx="210" cy="392" rx="102" ry="98"/></clipPath>
+  </defs>
   ${back.svg}
-  <g transform="rotate(${pose.tilt} 210 300)">
+  <g>
     <!-- лапки -->
-    <path d="M168 452 q-6 34 -22 42 q22 10 44 -6 z" fill="#ef8a26" stroke="${OUTLINE}" stroke-width="${SW}" stroke-linejoin="round"/>
-    <path d="M252 452 q6 34 22 42 q-22 10 -44 -6 z" fill="#ef8a26" stroke="${OUTLINE}" stroke-width="${SW}" stroke-linejoin="round"/>
+    <path d="M176 462 q-16 30 -38 38 q20 18 52 -2 q10 -22 -14 -36 z"
+      fill="#ef9a3a" stroke="${OUTLINE}" stroke-width="${SW}" stroke-linejoin="round"/>
+    <path d="M244 462 q16 30 38 38 q-20 18 -52 -2 q-10 -22 14 -36 z"
+      fill="#ef9a3a" stroke="${OUTLINE}" stroke-width="${SW}" stroke-linejoin="round"/>
+
     <!-- тіло -->
-    <ellipse cx="210" cy="392" rx="106" ry="88" fill="${body.main}" stroke="${OUTLINE}" stroke-width="${SW}"/>
-    <ellipse cx="176" cy="368" rx="46" ry="34" fill="${body.light}" opacity=".55"/>
-    <!-- одяг (обрізаний по формі тіла) -->
+    <ellipse cx="210" cy="392" rx="102" ry="98" fill="${body.main}" stroke="${OUTLINE}" stroke-width="${SW}"/>
+
+    <!-- одяг: обрізається точно по тілу -->
     <g clip-path="url(#bodyClip)">${find(CLOTHES, st.clothes).svg}</g>
+
     <!-- крила -->
-    <path d="${pose.wingL}" fill="${body.main}" stroke="${OUTLINE}" stroke-width="${SW}" stroke-linejoin="round"/>
-    <path d="${pose.wingR}" fill="${body.main}" stroke="${OUTLINE}" stroke-width="${SW}" stroke-linejoin="round"/>
+    <path d="M114 348 q-58 -14 -72 38 q-12 48 36 58 q38 -34 36 -96 z"
+      fill="${body.main}" stroke="${OUTLINE}" stroke-width="${SW}" stroke-linejoin="round"/>
+    <path d="M306 348 q58 -14 72 38 q12 48 -36 58 q-38 -34 -36 -96 z"
+      fill="${body.main}" stroke="${OUTLINE}" stroke-width="${SW}" stroke-linejoin="round"/>
+    <path d="M64 404 q22 22 40 26" fill="none" stroke="${body.light}" stroke-width="10" stroke-linecap="round" opacity=".8"/>
+    <path d="M356 404 q-22 22 -40 26" fill="none" stroke="${body.light}" stroke-width="10" stroke-linecap="round" opacity=".8"/>
+
     <!-- прикраса на шию -->
     ${find(NECK, st.neck).svg}
-    <!-- голова -->
-    <path d="M196 66 q4 -46 22 -60 q-4 34 10 52 q16 -18 30 -22 q-16 22 -12 46 z"
+
+    <!-- чубчик -->
+    <path d="M188 74 Q196 16 216 4 Q210 42 228 56 Q244 30 258 26 Q240 52 244 78 Z"
       fill="${body.main}" stroke="${OUTLINE}" stroke-width="${SW}" stroke-linejoin="round"/>
-    <ellipse cx="210" cy="196" rx="140" ry="132" fill="${body.main}" stroke="${OUTLINE}" stroke-width="${SW}"/>
-    <path d="M292 84 q54 32 58 88" fill="none" stroke="${body.light}" stroke-width="16" stroke-linecap="round" opacity=".7"/>
+
+    <!-- голова -->
+    <ellipse cx="210" cy="180" rx="134" ry="122" fill="${body.main}" stroke="${OUTLINE}" stroke-width="${SW}"/>
+    <path d="M286 82 q52 30 56 84" fill="none" stroke="#ffffff" stroke-width="15" stroke-linecap="round" opacity=".55"/>
+
+    <!-- щічки -->
+    <ellipse cx="112" cy="228" rx="26" ry="17" fill="#ff8f9c" opacity=".38"/>
+    <ellipse cx="308" cy="228" rx="26" ry="17" fill="#ff8f9c" opacity=".38"/>
+
     <!-- дзьоб -->
-    <path d="M210 236 q-46 6 -56 26 q-4 34 56 40 q60 -6 56 -40 q-10 -20 -56 -26 z"
-      fill="#ef8a26" stroke="${OUTLINE}" stroke-width="${SW}" stroke-linejoin="round"/>
-    <path d="M156 272 q54 16 108 0" fill="none" stroke="${OUTLINE}" stroke-width="8" stroke-linecap="round"/>
-    <ellipse cx="238" cy="252" rx="13" ry="7" fill="#fff" opacity=".6" transform="rotate(-18 238 252)"/>
+    <path d="M210 214 q-42 2 -49 23 q-3 28 49 32 q52 -4 49 -32 q-7 -21 -49 -23 z"
+      fill="#ef9a3a" stroke="${OUTLINE}" stroke-width="${SW}" stroke-linejoin="round"/>
+    <path d="M164 242 q46 15 92 0" fill="none" stroke="${OUTLINE}" stroke-width="8" stroke-linecap="round"/>
+    <ellipse cx="236" cy="228" rx="12" ry="6" fill="#fff" opacity=".65" transform="rotate(-16 236 228)"/>
+
     <!-- очі -->
-    ${eyes.svg}
+    <g transform="translate(0,-8)">${eyes.svg}</g>
+
     <!-- окуляри -->
-    ${find(GLASSES, st.glasses).svg}
+    <g transform="translate(0,-8)">${find(GLASSES, st.glasses).svg}</g>
+
     <!-- головний убір -->
-    ${find(HATS, st.hat).svg}
+    <g transform="translate(0,-2)">${find(HATS, st.hat).svg}</g>
+
     <!-- аксесуар -->
     ${find(PROPS, st.prop).svg}
   </g>`;
@@ -630,25 +674,40 @@ function draw(){
 }
 
 function buildControls(){
-  el('controls').innerHTML = CATS.map(cat=>`
-    <div class="cat">
-      <div class="cat-head">
-        <h3>${cat.title}</h3>
-        <span class="count">${cat.list.length} варіантів</span>
-      </div>
-      <div class="opts-row">
-        ${cat.list.map(o=>{
-          if(cat.swatch){
-            return `<button class="opt swatch" data-cat="${cat.key}" data-id="${o.id}" title="${o.name}"
-              style="background:${o.main};border-color:${o.dark}"></button>`;
-          }
-          return `<button class="opt" data-cat="${cat.key}" data-id="${o.id}">${o.name}</button>`;
-        }).join('')}
-      </div>
-    </div>`).join('');
-  document.querySelectorAll('.opt').forEach(b=>{
+  el('controls').innerHTML = `
+    <div class="tabs">
+      ${CATS.map(c=>`
+        <button class="tab" data-tab="${c.key}" title="${c.title}">
+          ${ICONS[c.key]}
+          <span class="tname">${c.short}</span>
+        </button>`).join('')}
+    </div>
+    <div class="panel" id="panel"></div>`;
+  document.querySelectorAll('.tab').forEach(b=>{
+    b.onclick = () => { openCat = b.dataset.tab; renderPanel(); };
+  });
+  renderPanel();
+}
+
+function renderPanel(){
+  const cat = CATS.find(c=>c.key===openCat);
+  document.querySelectorAll('.tab').forEach(b=>b.classList.toggle('on', b.dataset.tab===openCat));
+  el('panel').innerHTML = `
+    <div class="panel-head">
+      <h3>${cat.title}</h3>
+      <span class="count">${cat.list.length} варіантів</span>
+    </div>
+    <div class="opts-row">
+      ${cat.list.map(o=>cat.swatch
+        ? `<button class="opt swatch" data-cat="${cat.key}" data-id="${o.id}" title="${o.name}"
+             style="background:${o.main};border-color:${o.dark}"></button>`
+        : `<button class="opt" data-cat="${cat.key}" data-id="${o.id}">${o.name}</button>`
+      ).join('')}
+    </div>`;
+  el('panel').querySelectorAll('.opt').forEach(b=>{
     b.onclick = () => { state[b.dataset.cat] = b.dataset.id; draw(); };
   });
+  draw();
 }
 
 /* ---------- випадкова ---------- */
