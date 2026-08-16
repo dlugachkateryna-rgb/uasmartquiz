@@ -204,12 +204,8 @@ h2.sec-title em{font-style:normal;color:var(--purple2)}
 @media(max-width:900px){.photo-stack{height:380px}}
 
 /* counters */
-.counters{display:grid;grid-template-columns:repeat(5,1fr);gap:16px;margin-top:70px}
-.counter:nth-child(2){grid-column:span 2}
-@media(max-width:900px){
-  .counters{grid-template-columns:repeat(2,1fr)}
-  .counter:nth-child(2){grid-column:span 1}
-}
+.counters{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;margin-top:70px}
+@media(max-width:420px){.counters{grid-template-columns:1fr}}
 .counter{
   position:relative;overflow:hidden;
   background:var(--bg2);border:1px solid rgba(139,92,246,.25);border-radius:22px;
