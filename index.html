@@ -177,6 +177,16 @@ nav .links a.active:hover{transform:rotate(2deg)}
 
 /* ---------- sections ---------- */
 section{padding:110px 5vw;position:relative;max-width:1300px;margin:0 auto}
+/* handwritten scribbles on background */
+.scribble{
+  position:absolute;pointer-events:none;user-select:none;z-index:0;
+  font-family:'Caveat',cursive;font-weight:700;
+  color:var(--yellow);opacity:.42;
+  font-size:clamp(22px,2.4vw,34px);white-space:nowrap;
+  will-change:transform;
+}
+@media(max-width:900px){.scribble{display:none}}
+
 .sec-label{
   display:inline-block;font-family:'Caveat';font-size:30px;color:var(--yellow);
   transform:rotate(-3deg);margin-bottom:8px;
@@ -331,10 +341,16 @@ h2.sec-title em{font-style:normal;color:var(--purple2)}
 /* gallery */
 .gal-wrap{padding:110px 0;max-width:none}
 .gal-head{max-width:1300px;margin:0 auto;padding:0 5vw}
-.gal-row{display:flex;gap:18px;width:max-content;padding:12px 0;animation:galscroll 60s linear infinite}
-.gal-row.r2{animation-direction:reverse;animation-duration:70s}
-.gal-row:hover{animation-play-state:paused}
-@keyframes galscroll{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+.gal-track{
+  overflow-x:auto;overflow-y:hidden;
+  cursor:grab;-webkit-overflow-scrolling:touch;
+  scrollbar-width:none;-ms-overflow-style:none;
+  overscroll-behavior-x:contain;
+}
+.gal-track::-webkit-scrollbar{display:none}
+.gal-track.dragging{cursor:grabbing}
+.gal-track.dragging img{pointer-events:none}
+.gal-row{display:flex;gap:18px;width:max-content;padding:12px 0}
 .gal-row img{
   height:250px;width:auto;border-radius:16px;
   transition:transform .4s,filter .4s;filter:saturate(.92);
@@ -556,6 +572,8 @@ footer .script{color:var(--yellow);font-size:24px;display:block;margin-bottom:8p
     <a href="#formats">Що робимо</a>
     <a href="#quiz">Міні-квіз</a>
     <a href="#gallery">Галерея</a>
+    <a href="round.html">Спробувати</a>
+    <a href="duck.html">Качечка</a>
     <a href="sponsors.html">Спонсори</a>
     <a href="#team">Команда</a>
     <a href="#contact">Контакти</a>
@@ -570,7 +588,9 @@ footer .script{color:var(--yellow);font-size:24px;display:block;margin-bottom:8p
   <a href="#formats">Що робимо</a>
   <a href="#quiz">Міні-квіз</a>
   <a href="#gallery">Галерея</a>
-  <a href="sponsors.html">Спонсори</a>
+  <a href="round.html">Спробувати</a>
+    <a href="duck.html">Качечка</a>
+    <a href="sponsors.html">Спонсори</a>
   <a href="#team">Команда</a>
   <a href="#contact">Контакти</a>
 </div>
@@ -621,6 +641,7 @@ footer .script{color:var(--yellow);font-size:24px;display:block;margin-bottom:8p
 </section>
 
 <section id="formats">
+  <span class="scribble" data-sp="2" style="top:6%;right:3%;transform:rotate(-7deg)">а ти вже грав?</span>
   <span class="sec-label">що ми робимо?</span>
   <h2 class="sec-title">Формати <em>на будь-який смак</em></h2>
   <div class="cards">
@@ -648,6 +669,7 @@ footer .script{color:var(--yellow);font-size:24px;display:block;margin-bottom:8p
 </section>
 
 <section id="why">
+  <span class="scribble" data-sp="-2" style="top:5%;left:2%;transform:rotate(5deg)">збирай своїх!</span>
   <span class="sec-label">чому це працює?</span>
   <h2 class="sec-title">5 причин <em>закохатися в квіз</em></h2>
   <div class="why-grid">
@@ -685,6 +707,7 @@ footer .script{color:var(--yellow);font-size:24px;display:block;margin-bottom:8p
 </section>
 
 <section id="quiz">
+  <span class="scribble" data-sp="2.5" style="bottom:7%;right:4%;transform:rotate(6deg)">твоя команда чекає</span>
   <span class="sec-label">перевір себе!</span>
   <h2 class="sec-title">Міні-квіз: <em>чи готовий ти до гри?</em></h2>
   <div class="quizbox reveal">
@@ -709,15 +732,14 @@ footer .script{color:var(--yellow);font-size:24px;display:block;margin-bottom:8p
   <div class="gal-head">
     <span class="sec-label">як це виглядає?</span>
     <h2 class="sec-title">Моменти з наших <em>ігор</em></h2>
-    <p style="color:var(--muted);margin-bottom:36px">Наведи, щоб зупинити стрічку. Клікни на фото, щоб роздивитися</p>
+    <p style="color:var(--muted);margin-bottom:36px">Тягни стрічку мишкою або свайпни. Клікни на фото, щоб роздивитися</p>
   </div>
-  <div style="overflow:hidden">
-    <div class="gal-row" id="galRow1"></div>
-    <div class="gal-row r2" id="galRow2"></div>
-  </div>
+  <div class="gal-track" data-dir="1"><div class="gal-row" id="galRow1"></div></div>
+  <div class="gal-track" data-dir="-1"><div class="gal-row" id="galRow2"></div></div>
 </section>
 
 <section id="values">
+  <span class="scribble" data-sp="-2.5" style="top:8%;right:3%;transform:rotate(-5deg)">хто найрозумніший?</span>
   <span class="sec-label">питання на мільйон:</span>
   <h2 class="sec-title">Чому люди <em>повертаються до нас?</em></h2>
   <p style="color:var(--muted);margin-bottom:34px">Обери правильну відповідь (підказка: клікай сміливо)</p>
@@ -785,6 +807,7 @@ footer .script{color:var(--yellow);font-size:24px;display:block;margin-bottom:8p
 </section>
 
 <section id="team">
+  <span class="scribble" data-sp="2" style="top:6%;left:3%;transform:rotate(-6deg)">кря!</span>
   <span class="sec-label" style="display:block;text-align:center">хто за цим стоїть?</span>
   <h2 class="sec-title" style="text-align:center">Три мозки <em>за веселощами</em></h2>
   <div class="team">
@@ -817,6 +840,7 @@ footer .script{color:var(--yellow);font-size:24px;display:block;margin-bottom:8p
 </section>
 
 <section class="contact" id="contact">
+  <span class="scribble" data-sp="-2" style="top:4%;left:4%;transform:rotate(-8deg)">побачимось на грі!</span>
   <span class="quack" id="bigQuack">КРЯ!</span>
   <h2>Готові зробити ваш івент незабутнім?</h2>
   <span class="script">Let's quiz it up!</span>
@@ -911,6 +935,26 @@ const words=['UA SMART QUIZ','ТЕМАТИЧНІ КВІЗИ','КОРПОРАТИ
 const strip=words.map(w=>`<span>${w}</span><span class="sep">✦</span>`).join('');
 document.getElementById('mq1').innerHTML=strip+strip;
 document.getElementById('mq2').innerHTML=strip+strip;
+
+// ---------- scribble parallax ----------
+{
+  const scribbles=[...document.querySelectorAll('.scribble')];
+  if(scribbles.length&&!matchMedia('(prefers-reduced-motion:reduce)').matches){
+    let ticking=false;
+    const upd=()=>{
+      scribbles.forEach(s=>{
+        const sp=+s.dataset.sp||2;
+        const r=s.getBoundingClientRect();
+        const off=(r.top+r.height/2-innerHeight/2)/innerHeight;
+        const base=s.style.transform.match(/rotate\([-\d.]+deg\)/);
+        s.style.transform=`translateY(${(-off*sp*26).toFixed(1)}px) ${base?base[0]:''}`;
+      });
+      ticking=false;
+    };
+    addEventListener('scroll',()=>{if(!ticking){ticking=true;requestAnimationFrame(upd);}},{passive:true});
+    upd();
+  }
+}
 
 // ---------- scrollspy: highlight active section in menu ----------
 const spyLinks=[...document.querySelectorAll('nav .links a'),...document.querySelectorAll('#mobileMenu a')];
@@ -1032,9 +1076,59 @@ function fillRow(el,list){
 fillRow(document.getElementById('galRow1'),photos);
 fillRow(document.getElementById('galRow2'),photos2);
 
+// drag / swipe + auto-scroll for gallery tracks
+document.querySelectorAll('.gal-track').forEach(track=>{
+  const dir=+track.dataset.dir;
+  let paused=false,down=false,startX=0,startScroll=0,moved=0;
+  const half=()=>track.scrollWidth/2;
+  const norm=()=>{
+    const h=half();
+    if(h<=0)return;
+    if(track.scrollLeft>=h)track.scrollLeft-=h;
+    else if(track.scrollLeft<=0)track.scrollLeft+=h;
+  };
+  // start second row from the middle so it can scroll left seamlessly
+  requestAnimationFrame(()=>{track.scrollLeft=dir<0?half():1;});
+
+  track.addEventListener('pointerdown',e=>{
+    down=true;moved=0;startX=e.clientX;startScroll=track.scrollLeft;
+    track.classList.add('dragging');track.setPointerCapture(e.pointerId);
+  });
+  track.addEventListener('pointermove',e=>{
+    if(!down)return;
+    const dx=e.clientX-startX;
+    moved=Math.max(moved,Math.abs(dx));
+    track.scrollLeft=startScroll-dx;norm();
+  });
+  const end=e=>{
+    if(!down)return;
+    down=false;track.classList.remove('dragging');
+    try{track.releasePointerCapture(e.pointerId);}catch(_){}
+  };
+  track.addEventListener('pointerup',end);
+  track.addEventListener('pointercancel',end);
+  track.addEventListener('mouseenter',()=>paused=true);
+  track.addEventListener('mouseleave',()=>paused=false);
+  track.addEventListener('touchstart',()=>paused=true,{passive:true});
+  track.addEventListener('touchend',()=>setTimeout(()=>paused=false,2500));
+  track.addEventListener('click',e=>{
+    if(moved>6){e.stopPropagation();e.preventDefault();}
+  },true);
+
+  let last=0;
+  const speed=22; // px per second
+  const step=ts=>{
+    if(!last)last=ts;
+    const dt=(ts-last)/1000;last=ts;
+    if(!paused&&!down){track.scrollLeft+=dir*speed*dt;norm();}
+    requestAnimationFrame(step);
+  };
+  requestAnimationFrame(step);
+});
+
 // ---------- lightbox ----------
 const lb=document.getElementById('lightbox'),lbImg=lb.querySelector('img');
-document.querySelectorAll('.gal-row, .crew-collage').forEach(r=>r.addEventListener('click',e=>{
+document.querySelectorAll('.gal-track, .crew-collage').forEach(r=>r.addEventListener('click',e=>{
   if(e.target.tagName==='IMG'){lbImg.src=e.target.src;lb.classList.add('open');}
 }));
 lb.addEventListener('click',()=>lb.classList.remove('open'));

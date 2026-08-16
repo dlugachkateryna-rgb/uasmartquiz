@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Спробуй наш квіз - UA Smart Quiz</title>
+<meta name="description" content="Скуштуй, що таке квіз від UA Smart Quiz: збірка питань з різних раундів нашої гри - з таймером, відповідями та поясненнями.">
+<link rel="icon" href="photos/logo-yellow.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@300;400;600;800;900&family=Rubik:wght@300;400;500;700&family=Caveat:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0c0a10; --bg2:#14111c; --yellow:#ffd100; --purple:#8b5cf6;
+  --purple2:#a78bfa; --pink:#ff5ea8; --white:#f5f2ff; --muted:#a89fc0;
+  --green:#4ade80;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth;overflow-x:hidden}
+body{background:var(--bg);color:var(--white);font-family:'Rubik',sans-serif;overflow-x:hidden}
+img{max-width:100%;display:block}
+a{color:inherit;text-decoration:none}
+h1,h2,h3{font-family:'Unbounded',sans-serif}
+.script{font-family:'Caveat',cursive}
+
+nav{position:fixed;top:0;left:0;right:0;z-index:900;display:flex;align-items:center;justify-content:space-between;
+  padding:14px 5vw;background:rgba(12,10,16,.55);backdrop-filter:blur(14px);border-bottom:1px solid rgba(255,209,0,.12)}
+nav .brand{display:flex;align-items:center;gap:10px}
+nav .brand img{width:44px;height:44px;transition:transform .5s}
+nav .brand:hover img{transform:rotate(360deg)}
+nav .brand span{font-family:'Unbounded';font-weight:800;font-size:15px;letter-spacing:.5px}
+nav .links{display:flex;gap:4px;font-size:14px;font-weight:500;background:rgba(255,255,255,.05);
+  border:1px solid rgba(255,255,255,.08);border-radius:50px;padding:5px}
+nav .links a{position:relative;padding:8px 15px;border-radius:40px;color:var(--muted);
+  transition:color .25s,background .25s,transform .25s}
+nav .links a:hover{color:var(--white);background:rgba(255,255,255,.08);transform:translateY(-2px) rotate(-1.5deg)}
+nav .links a.active{background:var(--yellow);color:#131313;font-weight:700;transform:rotate(-2deg);
+  box-shadow:0 4px 16px rgba(255,209,0,.4)}
+nav .links a.active:hover{transform:rotate(2deg)}
+@media(max-width:820px){
+  nav .links{display:none}
+  nav .btn{padding:10px 14px!important;font-size:12.5px!important;white-space:nowrap}
+  nav .brand span{display:none}
+}
+.burger{display:none;flex-direction:column;gap:5px;background:none;border:none;padding:8px;cursor:pointer}
+.burger i{display:block;width:24px;height:3px;background:var(--yellow);border-radius:2px;transition:transform .3s,opacity .3s}
+.burger.open i:nth-child(1){transform:translateY(8px) rotate(45deg)}
+.burger.open i:nth-child(2){opacity:0}
+.burger.open i:nth-child(3){transform:translateY(-8px) rotate(-45deg)}
+@media(max-width:820px){.burger{display:flex}}
+#mobileMenu{position:fixed;inset:0;z-index:890;background:rgba(12,10,16,.97);backdrop-filter:blur(12px);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:26px;
+  opacity:0;visibility:hidden;transition:opacity .35s,visibility .35s}
+#mobileMenu.open{opacity:1;visibility:visible}
+#mobileMenu a{font-family:'Unbounded';font-weight:600;font-size:19px;color:var(--white);
+  padding:10px 24px;border-radius:40px;transition:all .25s}
+#mobileMenu a:nth-child(odd){transform:rotate(-2deg)}
+#mobileMenu a:nth-child(even){transform:rotate(2deg)}
+#mobileMenu a:active,#mobileMenu a.active{background:var(--yellow);color:#131313}
+
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;padding:16px 34px;border-radius:60px;
+  font-family:'Rubik';font-weight:700;font-size:16px;
+  transition:transform .25s,box-shadow .25s,background .25s;cursor:pointer;border:none}
+.btn-yellow{background:var(--yellow);color:#141414;box-shadow:0 8px 30px rgba(255,209,0,.35)}
+.btn-yellow:hover{transform:translateY(-4px) scale(1.03);box-shadow:0 14px 40px rgba(255,209,0,.5)}
+.btn-ghost{border:2px solid var(--purple);color:var(--purple2);background:none}
+.btn-ghost:hover{background:var(--purple);color:#fff;transform:translateY(-4px)}
+.btn:disabled{opacity:.45;cursor:default;transform:none!important;box-shadow:none}
+
+.scribble{position:absolute;pointer-events:none;user-select:none;z-index:0;
+  font-family:'Caveat',cursive;font-weight:700;color:var(--yellow);opacity:.42;
+  font-size:clamp(22px,2.4vw,34px);white-space:nowrap}
+@media(max-width:900px){.scribble{display:none}}
+
+header.page-hero{padding:150px 5vw 20px;max-width:1300px;margin:0 auto;text-align:center;position:relative}
+.sec-label{display:inline-block;font-family:'Caveat';font-size:30px;color:var(--yellow);transform:rotate(-3deg);margin-bottom:8px}
+h1.sec-title{font-size:clamp(30px,5vw,54px);font-weight:900;line-height:1.1;margin-bottom:18px}
+h1.sec-title em{font-style:normal;color:var(--purple2)}
+.page-hero .sub{color:var(--muted);font-size:17px;max-width:660px;margin:0 auto}
+
+section{padding:40px 5vw 100px;position:relative;max-width:1300px;margin:0 auto}
+.reveal{opacity:0;transform:translateY(50px);transition:opacity .9s,transform .9s cubic-bezier(.2,.8,.2,1)}
+.reveal.on{opacity:1;transform:none}
+
+/* round types */
+.types{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;max-width:1000px;margin:0 auto 60px}
+@media(max-width:900px){.types{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:520px){.types{grid-template-columns:1fr}}
+.type{background:var(--bg2);border:1px solid rgba(255,255,255,.08);border-radius:20px;padding:22px 18px;
+  text-align:center;transition:transform .35s,border-color .35s}
+.type:hover{transform:translateY(-8px) rotate(-1deg);border-color:var(--yellow)}
+.type .ic{width:42px;height:42px;margin:0 auto 12px;color:var(--yellow)}
+.type .ic svg{width:100%;height:100%;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+.type h3{font-size:15.5px;margin-bottom:6px}
+.type p{color:var(--muted);font-size:13.5px;line-height:1.55}
+
+/* quiz stage */
+.stage{max-width:860px;margin:0 auto;
+  background:linear-gradient(135deg,#1b1430,#141020);
+  border:2px solid rgba(139,92,246,.4);border-radius:30px;
+  padding:clamp(24px,4vw,46px);box-shadow:0 30px 80px rgba(80,50,180,.2)}
+.stage-top{display:flex;align-items:center;justify-content:space-between;gap:14px;margin-bottom:18px;flex-wrap:wrap}
+.round-name{font-family:'Caveat';font-size:27px;color:var(--pink)}
+.qcount{font-size:14px;color:var(--muted);font-weight:500}
+.timer{height:8px;border-radius:8px;background:rgba(255,255,255,.1);overflow:hidden;margin-bottom:26px}
+.timer i{display:block;height:100%;width:100%;border-radius:8px;
+  background:linear-gradient(90deg,var(--yellow),var(--pink));transform-origin:left;}
+.timer i.run{animation:tick 20s linear forwards}
+@keyframes tick{from{transform:scaleX(1)}to{transform:scaleX(0)}}
+.qtext{font-family:'Unbounded';font-weight:800;font-size:clamp(19px,2.5vw,26px);line-height:1.35;margin-bottom:24px}
+.qmedia{margin-bottom:22px;border-radius:18px;overflow:hidden;border:1px solid rgba(255,255,255,.1)}
+.qmedia img{width:100%;max-height:340px;object-fit:cover}
+.opts{display:grid;grid-template-columns:1fr 1fr;gap:13px}
+@media(max-width:640px){.opts{grid-template-columns:1fr}}
+.opts button{font-family:'Rubik';font-size:16px;text-align:left;display:flex;align-items:center;gap:12px;
+  padding:15px 18px;border-radius:16px;border:2px solid rgba(255,255,255,.14);
+  background:rgba(255,255,255,.04);color:var(--white);transition:all .25s;cursor:pointer}
+.opts button:hover:not(:disabled){border-color:var(--yellow);background:rgba(255,209,0,.1);transform:translateY(-3px)}
+.opts button .let{min-width:28px;height:28px;border-radius:50%;border:2px solid rgba(255,255,255,.25);
+  display:flex;align-items:center;justify-content:center;font-family:'Unbounded';font-weight:800;font-size:12.5px}
+.opts button.good{background:rgba(74,222,128,.18);border-color:var(--green)}
+.opts button.good .let{border-color:var(--green);background:var(--green);color:#0b1a10}
+.opts button.bad{background:rgba(255,94,168,.16);border-color:var(--pink)}
+.opts button:disabled{cursor:default}
+.explain{margin-top:20px;padding:16px 18px;border-radius:16px;background:rgba(255,209,0,.07);
+  border-left:3px solid var(--yellow);color:#e6dff5;font-size:15px;line-height:1.6;display:none}
+.explain.show{display:block}
+.explain b{color:var(--yellow)}
+.stage-actions{display:flex;gap:12px;margin-top:24px;flex-wrap:wrap}
+.stage-actions .btn{flex:1;min-width:180px}
+
+/* result */
+.result{display:none;text-align:center}
+.result img{width:110px;margin:0 auto 16px;animation:bob 1.4s infinite}
+@keyframes bob{0%,100%{transform:translateY(0) rotate(-5deg)}50%{transform:translateY(-14px) rotate(5deg)}}
+.result h2{font-size:clamp(24px,3.4vw,34px);margin-bottom:8px;color:var(--yellow)}
+.result .score{font-family:'Unbounded';font-weight:900;font-size:52px;color:var(--white);margin:6px 0 4px}
+.result p{color:var(--muted);font-size:16.5px;margin-bottom:26px;line-height:1.6}
+
+/* how it works steps */
+.flow{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;max-width:1000px;margin:70px auto 0}
+@media(max-width:900px){.flow{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:520px){.flow{grid-template-columns:1fr}}
+.fstep{position:relative;background:var(--bg2);border:1px solid rgba(255,255,255,.08);
+  border-radius:20px;padding:24px 20px;transition:transform .35s,border-color .35s}
+.fstep:hover{transform:translateY(-8px);border-color:var(--yellow)}
+.fstep .n{font-family:'Unbounded';font-weight:900;font-size:30px;color:var(--yellow);margin-bottom:10px}
+.fstep h3{font-size:15.5px;margin-bottom:8px}
+.fstep p{color:var(--muted);font-size:13.5px;line-height:1.55}
+
+.cta-end{text-align:center;margin-top:80px}
+.cta-end .script{font-size:30px;color:var(--yellow);display:block;margin-bottom:18px}
+
+footer{border-top:1px solid rgba(255,255,255,.08);padding:34px 5vw;text-align:center;color:var(--muted);font-size:14px}
+footer .script{color:var(--yellow);font-size:24px;display:block;margin-bottom:8px}
+
+.confetti{position:fixed;z-index:9997;pointer-events:none;top:-20px;border-radius:3px;animation:cf linear forwards}
+@keyframes cf{to{transform:translateY(110vh) rotate(720deg)}}
+</style>
+</head>
+<body>
+
+<nav>
+  <a class="brand" href="index.html">
+    <img src="photos/logo-yellow.png" alt="UA Smart Quiz">
+    <span>UA SMART QUIZ</span>
+  </a>
+  <div class="links">
+    <a href="index.html#about">Хто ми</a>
+    <a href="index.html#formats">Що робимо</a>
+    <a class="active" href="round.html">Спробувати</a>
+    <a href="index.html#gallery">Галерея</a>
+    <a href="duck.html">Качечка</a>
+    <a href="sponsors.html">Спонсори</a>
+    <a href="index.html#team">Команда</a>
+    <a href="index.html#contact">Контакти</a>
+  </div>
+  <div style="display:flex;align-items:center;gap:8px">
+    <a class="btn btn-yellow" style="padding:12px 24px;font-size:14px" href="index.html#contact">Замовити квіз</a>
+    <button class="burger" id="burger" aria-label="Меню"><i></i><i></i><i></i></button>
+  </div>
+</nav>
+<div id="mobileMenu">
+  <a href="index.html#about">Хто ми</a>
+  <a href="index.html#formats">Що робимо</a>
+  <a href="round.html">Спробувати</a>
+  <a href="index.html#gallery">Галерея</a>
+  <a href="sponsors.html">Спонсори</a>
+  <a href="index.html#team">Команда</a>
+  <a href="index.html#contact">Контакти</a>
+</div>
+
+<header class="page-hero">
+  <span class="scribble" style="top:38%;left:6%;transform:rotate(-8deg)">спробуй сам!</span>
+  <span class="scribble" style="top:52%;right:7%;transform:rotate(6deg)">а ти вгадаєш?</span>
+  <span class="sec-label">як це працює?</span>
+  <h1 class="sec-title">Скуштуй, <em>що таке квіз</em></h1>
+  <p class="sub">Ми зібрали питання з різних раундів нашої гри - музика, візуал, логіка та ерудиція. Це маленький дегустаційний сет: спробуй і відчуй атмосферу справжнього квізу.</p>
+</header>
+
+<section style="padding-top:30px">
+  <div class="types reveal">
+    <div class="type">
+      <span class="ic"><svg viewBox="0 0 24 24"><path d="M9 18V5.5l11-2.2V16"/><circle cx="6.2" cy="18" r="2.8"/><circle cx="17.2" cy="16" r="2.8"/></svg></span>
+      <h3>Музичний</h3>
+      <p>Вгадай трек за інтро, продовж рядок або впізнай кавер</p>
+    </div>
+    <div class="type">
+      <span class="ic"><svg viewBox="0 0 24 24"><rect x="3.5" y="9.5" width="17" height="9.5" rx="1.8"/><path d="M4.5 9.5 6 5l14.5 2.2-1 2.3"/><path d="M9.2 5.5l1.4 3.4M13.8 6.2l1.4 3.2"/></svg></span>
+      <h3>Візуальний</h3>
+      <p>Кадр із фільму, логотип навпаки або зірка в дитинстві</p>
+    </div>
+    <div class="type">
+      <span class="ic"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M9.3 9.2a2.8 2.8 0 1 1 3.4 3.4v1.6"/><circle cx="12" cy="17.4" r=".7" fill="currentColor"/></svg></span>
+      <h3>Логічний</h3>
+      <p>Загадки, ребуси та питання на кмітливість без гугла</p>
+    </div>
+    <div class="type">
+      <span class="ic"><svg viewBox="0 0 24 24"><path d="M13 2 4.5 13.5h5L8 22l8.5-11.5h-5z"/></svg></span>
+      <h3>Фан-челендж</h3>
+      <p>Завдання на швидкість: намалюй, покажи, вгадай</p>
+    </div>
+  </div>
+
+  <div class="stage reveal">
+    <div id="game">
+      <div class="stage-top">
+        <span class="round-name" id="roundName"></span>
+        <span class="qcount" id="qcount"></span>
+      </div>
+      <div class="timer"><i id="timerBar"></i></div>
+      <h2 class="qtext" id="qtext"></h2>
+      <div class="qmedia" id="qmedia" style="display:none"><img id="qimg" src="" alt=""></div>
+      <div class="opts" id="opts"></div>
+      <div class="explain" id="explain"></div>
+      <div class="stage-actions">
+        <button class="btn btn-yellow" id="nextBtn" disabled>Наступне питання</button>
+      </div>
+    </div>
+
+    <div class="result" id="result">
+      <img src="photos/duck.png" alt="">
+      <h2 id="resTitle"></h2>
+      <div class="score" id="resScore"></div>
+      <p id="resText"></p>
+      <div class="stage-actions" style="justify-content:center">
+        <a class="btn btn-yellow" href="index.html#contact">Хочу такий квіз!</a>
+        <button class="btn btn-ghost" id="againBtn">Пройти ще раз</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="flow reveal">
+    <div class="fstep"><div class="n">1</div><h3>Збираєш команду</h3><p>Від 2 до 12 людей за столом. Придумуєте назву - і вона піде в турнірну таблицю.</p></div>
+    <div class="fstep"><div class="n">2</div><h3>7 раундів гри</h3><p>Музика, візуал, логіка та фан-челенджі. Формат змінюється кожні 15 хвилин.</p></div>
+    <div class="fstep"><div class="n">3</div><h3>Здаєте бланки</h3><p>Після кожного раунду ведучий розбирає відповіді - з поясненнями та жартами.</p></div>
+    <div class="fstep"><div class="n">4</div><h3>Нагородження</h3><p>Призові місця отримують подарунки від наших спонсорів. І всі йдуть щасливі.</p></div>
+  </div>
+
+  <div class="cta-end reveal">
+    <span class="script">Готові зіграти по-справжньому?</span>
+    <a class="btn btn-yellow" href="index.html#contact">Замовити квіз</a>
+    <a class="btn btn-ghost" style="margin-left:10px" href="index.html#quiz">Ще міні-квіз</a>
+  </div>
+</section>
+
+<footer>
+  <span class="script">Where knowledge meets fun!</span>
+  © <span id="year"></span> UA Smart Quiz • Зроблено з любов'ю і кря-енергією
+</footer>
+
+<script>
+/* ============================================================
+   ДЕМО-ПИТАННЯ (збірка з різних раундів)
+   Катю, щоб замінити на справжні - просто відредагуй масив нижче.
+   q     - текст питання
+   opts  - 4 варіанти відповіді
+   c     - індекс правильної (0 = перший варіант)
+   why   - пояснення, яке показується після відповіді
+   img   - (необов'язково) шлях до картинки, напр. 'photos/game-ducks.jpg'
+   ============================================================ */
+const ROUND_NAME = 'Дегустаційний сет';
+
+const QUESTIONS = [
+  {
+    q: 'Яка країна подарувала США Статую Свободи?',
+    opts: ['Велика Британія','Франція','Італія','Іспанія'],
+    c: 1,
+    why: 'Статую подарувала <b>Франція</b> у 1886 році до сторіччя незалежності США. Каркас спроєктував Гюстав Ейфель - той самий, що й вежу.'
+  },
+  {
+    q: 'Скільки струн у класичної гітари?',
+    opts: ['4','6','7','12'],
+    c: 1,
+    why: 'У класичної гітари <b>6</b> струн. Хоча існують і 7-струнні, і 12-струнні варіанти - але це вже інші інструменти.'
+  },
+  {
+    q: 'Хто написав роман «Тигролови»?',
+    opts: ['Іван Багряний','Валер\'ян Підмогильний','Микола Хвильовий','Юрій Яновський'],
+    c: 0,
+    why: '<b>Іван Багряний</b> написав «Тигролови» у 1944 році. Роман про втечу з ГУЛАГу став одним із найпопулярніших українських пригодницьких творів.'
+  },
+  {
+    q: 'Що з цього НЕ є мовою програмування?',
+    opts: ['Python','Rust','Cobra','Anaconda'],
+    c: 3,
+    why: '<b>Anaconda</b> - це не мова, а дистрибутив Python для науки про дані. А от Cobra справді існує як мова програмування.'
+  },
+  {
+    q: 'У якому місті знаходиться найбільший у світі годинник Rolex?',
+    opts: ['Женева','Токіо','Дубай','Нью-Йорк'],
+    c: 2,
+    why: 'У <b>Дубаї</b>, на вежі Rolex у районі Дейра. Хоча найвідоміша реклама Rolex - це, звісно, годинник на Таймс-сквер.'
+  }
+];
+
+/* ============================================================ */
+
+const LETTERS = ['А','Б','В','Г'];
+let qi = 0, score = 0, answered = false;
+
+const el = id => document.getElementById(id);
+const game = el('game'), result = el('result');
+
+function confettiBurst(n){
+  const colors=['#ffd100','#8b5cf6','#ff5ea8','#ffffff','#4ade80'];
+  for(let i=0;i<n;i++){
+    const c=document.createElement('div');c.className='confetti';
+    c.style.left=Math.random()*100+'vw';
+    c.style.width=c.style.height=(6+Math.random()*8)+'px';
+    c.style.background=colors[Math.floor(Math.random()*colors.length)];
+    c.style.animationDuration=(2+Math.random()*2.5)+'s';
+    document.body.appendChild(c);setTimeout(()=>c.remove(),5000);
+  }
+}
+
+function render(){
+  const Q = QUESTIONS[qi];
+  answered = false;
+  el('roundName').textContent = ROUND_NAME;
+  el('qcount').textContent = `Питання ${qi+1} / ${QUESTIONS.length}`;
+  el('qtext').textContent = Q.q;
+
+  const media = el('qmedia');
+  if(Q.img){ el('qimg').src = Q.img; media.style.display = 'block'; }
+  else media.style.display = 'none';
+
+  const bar = el('timerBar');
+  bar.classList.remove('run'); void bar.offsetWidth; bar.classList.add('run');
+
+  const explain = el('explain');
+  explain.classList.remove('show'); explain.innerHTML = '';
+
+  const next = el('nextBtn');
+  next.disabled = true;
+  next.textContent = qi === QUESTIONS.length-1 ? 'Показати результат' : 'Наступне питання';
+
+  const opts = el('opts');
+  opts.innerHTML = '';
+  Q.opts.forEach((text,i)=>{
+    const b = document.createElement('button');
+    b.innerHTML = `<span class="let">${LETTERS[i]}</span><span>${text}</span>`;
+    b.onclick = () => answer(i,b);
+    opts.appendChild(b);
+  });
+}
+
+function answer(i,btn){
+  if(answered) return;
+  answered = true;
+  const Q = QUESTIONS[qi];
+  el('timerBar').classList.remove('run');
+  [...el('opts').children].forEach(b => b.disabled = true);
+
+  if(i === Q.c){ btn.classList.add('good'); score++; confettiBurst(18); }
+  else { btn.classList.add('bad'); el('opts').children[Q.c].classList.add('good'); }
+
+  const explain = el('explain');
+  explain.innerHTML = Q.why;
+  explain.classList.add('show');
+  el('nextBtn').disabled = false;
+}
+
+el('nextBtn').onclick = () => {
+  if(qi < QUESTIONS.length-1){ qi++; render(); }
+  else showResult();
+};
+
+function showResult(){
+  game.style.display = 'none';
+  result.style.display = 'block';
+  el('resScore').textContent = `${score} / ${QUESTIONS.length}`;
+  const pct = score / QUESTIONS.length;
+  if(pct === 1){
+    el('resTitle').textContent = 'Ідеально! Кря-геній';
+    el('resText').textContent = 'Усі відповіді правильні. Твоїй команді точно треба на наш квіз - там таких люблять.';
+    confettiBurst(90);
+  } else if(pct >= 0.6){
+    el('resTitle').textContent = 'Сильний результат!';
+    el('resText').textContent = 'І це лише один раунд із семи. На справжній грі буде ще музика, візуал і фан-челенджі.';
+    confettiBurst(45);
+  } else {
+    el('resTitle').textContent = 'Нормальний старт';
+    el('resText').textContent = 'На квізі грають командою - і разом ви згадаєте набагато більше. Плюс головне не бали, а вечір.';
+  }
+}
+
+el('againBtn').onclick = () => {
+  qi = 0; score = 0;
+  result.style.display = 'none';
+  game.style.display = 'block';
+  render();
+};
+
+// reveal
+const io = new IntersectionObserver(es => es.forEach(e => {
+  if(e.isIntersecting){ e.target.classList.add('on'); io.unobserve(e.target); }
+}), {threshold:.12});
+document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+// burger
+const burger = el('burger'), mm = el('mobileMenu');
+burger.addEventListener('click', () => { burger.classList.toggle('open'); mm.classList.toggle('open'); });
+mm.querySelectorAll('a').forEach(a => a.addEventListener('click', () => { burger.classList.remove('open'); mm.classList.remove('open'); }));
+
+el('year').textContent = new Date().getFullYear();
+render();
+</script>
+</body>
+</html>
