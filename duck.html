@@ -432,54 +432,61 @@ const GLASSES = [
 ];
 
 /* ---------- одяг ---------- */
+/* Базова форма одягу = точний контур тіла (еліпс 210,392 r 102x98),
+   зрізаний зверху лінією плечей з м'якою горловиною.
+   Завдяки цьому будь-який одяг сидить ідеально по фігурі. */
+const SHIRT = 'M118 350 A102 98 0 1 0 302 350 Q256 374 210 374 Q164 374 118 350 Z';
+const SHIRT_LOW = 'M126 336 A102 98 0 1 0 294 336 Q252 366 210 366 Q168 366 126 336 Z';
+
 const CLOTHES = [
   {id:'none', name:'Без одягу', svg:''},
   {id:'tshirt', name:'Футболка', svg:`
-    <path d="M80 340 q56 26 90 26 q22 0 40 -16 q18 16 40 16 q34 0 90 -26 L340 520 L80 520 Z"
-      fill="#4dc3ff" stroke="${OUTLINE}" stroke-width="${SW}" stroke-linejoin="round"/>`},
+    <path d="${SHIRT}" fill="#4dc3ff" stroke="${OUTLINE}" stroke-width="${SW}" stroke-linejoin="round"/>
+    <path d="M172 360 q38 26 76 0" fill="none" stroke="#38a9e0" stroke-width="8" stroke-linecap="round"/>`},
   {id:'vyshyvanka', name:'Вишиванка', svg:`
-    <path d="M80 340 q56 26 90 26 q22 0 40 -16 q18 16 40 16 q34 0 90 -26 L340 520 L80 520 Z"
-      fill="#fbf6ea" stroke="${OUTLINE}" stroke-width="${SW}" stroke-linejoin="round"/>
-    <path d="M80 396 h260 M80 428 h260" stroke="#e0483c" stroke-width="8" stroke-dasharray="13 11"/>
-    ${[140,180,220,260].map(x=>`<path d="M${x} 462 l13 -15 l13 15 l-13 15 z" fill="#4a7de0" stroke="${OUTLINE}" stroke-width="4"/>`).join('')}`},
+    <path d="${SHIRT}" fill="#fbf6ea" stroke="${OUTLINE}" stroke-width="${SW}" stroke-linejoin="round"/>
+    <path d="M132 402 q78 20 156 0" fill="none" stroke="#e0483c" stroke-width="9" stroke-dasharray="13 11"/>
+    <path d="M124 438 q86 22 172 0" fill="none" stroke="#e0483c" stroke-width="9" stroke-dasharray="13 11"/>
+    ${[168,210,252].map(x=>`<path d="M${x} 468 l12 -14 l12 14 l-12 14 z" fill="#4a7de0" stroke="${OUTLINE}" stroke-width="4"/>`).join('')}`},
   {id:'tux', name:'Смокінг', svg:`
-    <path d="M80 340 q56 26 90 26 q22 0 40 -16 q18 16 40 16 q34 0 90 -26 L340 520 L80 520 Z"
-      fill="#2f2a3d" stroke="${OUTLINE}" stroke-width="${SW}" stroke-linejoin="round"/>
-    <path d="M168 356 L210 424 L252 356 L252 520 L168 520 Z" fill="#fff8f0" stroke="${OUTLINE}" stroke-width="8" stroke-linejoin="round"/>
-    <circle cx="210" cy="452" r="7" fill="${OUTLINE}"/><circle cx="210" cy="486" r="7" fill="${OUTLINE}"/>`},
+    <path d="${SHIRT}" fill="#2f2a3d" stroke="${OUTLINE}" stroke-width="${SW}" stroke-linejoin="round"/>
+    <path d="M172 362 L210 430 L248 362 Q248 470 210 480 Q172 470 172 362 Z"
+      fill="#fff8f0" stroke="${OUTLINE}" stroke-width="8" stroke-linejoin="round"/>
+    <circle cx="210" cy="446" r="7" fill="${OUTLINE}"/>`},
   {id:'hoodie', name:'Худі', svg:`
-    <path d="M76 344 q60 26 94 26 q22 0 40 -16 q18 16 40 16 q34 0 94 -26 L344 520 L76 520 Z"
-      fill="#8b5cf6" stroke="${OUTLINE}" stroke-width="${SW}" stroke-linejoin="round"/>
-    <path d="M158 350 q52 44 104 0 q6 34 -52 38 q-58 -4 -52 -38 z" fill="#7247e0" stroke="${OUTLINE}" stroke-width="9" stroke-linejoin="round"/>
-    <path d="M188 392 v46 M232 392 v46" stroke="#fff" stroke-width="8" stroke-linecap="round" opacity=".9"/>
-    <path d="M150 446 q60 22 120 0" fill="none" stroke="#7247e0" stroke-width="10"/>`},
+    <path d="${SHIRT}" fill="#8b5cf6" stroke="${OUTLINE}" stroke-width="${SW}" stroke-linejoin="round"/>
+    <path d="M158 356 q52 42 104 0 q4 32 -52 36 q-56 -4 -52 -36 z" fill="#7247e0" stroke="${OUTLINE}" stroke-width="9" stroke-linejoin="round"/>
+    <path d="M190 396 v44 M230 396 v44" stroke="#fff" stroke-width="8" stroke-linecap="round" opacity=".9"/>
+    <path d="M150 452 q60 20 120 0" fill="none" stroke="#7247e0" stroke-width="11"/>`},
   {id:'stripes', name:'Тільняшка', svg:`
-    <path d="M80 340 q56 26 90 26 q22 0 40 -16 q18 16 40 16 q34 0 90 -26 L340 520 L80 520 Z"
-      fill="#f4f0e6" stroke="${OUTLINE}" stroke-width="${SW}" stroke-linejoin="round"/>
-    ${[382,410,438,466,494].map(y=>`<path d="M76 ${y} q134 16 268 0" stroke="#2f5da8" stroke-width="14" fill="none"/>`).join('')}`},
+    <path d="${SHIRT}" fill="#f4f0e6" stroke="${OUTLINE}" stroke-width="${SW}" stroke-linejoin="round"/>
+    <path d="M124 386 q86 18 172 0" stroke="#2f5da8" stroke-width="14" fill="none"/>
+    <path d="M116 416 q94 18 188 0" stroke="#2f5da8" stroke-width="14" fill="none"/>
+    <path d="M124 446 q86 18 172 0" stroke="#2f5da8" stroke-width="14" fill="none"/>
+    <path d="M144 474 q66 16 132 0" stroke="#2f5da8" stroke-width="14" fill="none"/>`},
   {id:'cape', name:'Плащ героя', svg:`
-    <path d="M80 340 q56 26 90 26 q22 0 40 -16 q18 16 40 16 q34 0 90 -26 L340 520 L80 520 Z"
-      fill="#e0483c" stroke="${OUTLINE}" stroke-width="${SW}" stroke-linejoin="round"/>
-    <path d="M210 380 l20 38 l-20 34 l-20 -34 z" fill="#ffd43b" stroke="${OUTLINE}" stroke-width="6" stroke-linejoin="round"/>`},
+    <path d="${SHIRT}" fill="#e0483c" stroke="${OUTLINE}" stroke-width="${SW}" stroke-linejoin="round"/>
+    <path d="M210 386 l22 42 l-22 38 l-22 -38 z" fill="#ffd43b" stroke="${OUTLINE}" stroke-width="6" stroke-linejoin="round"/>`},
   {id:'jacket', name:'Джинсовка', svg:`
-    <path d="M80 340 q56 26 90 26 q22 0 40 -16 q18 16 40 16 q34 0 90 -26 L340 520 L80 520 Z"
-      fill="#5c7fa8" stroke="${OUTLINE}" stroke-width="${SW}" stroke-linejoin="round"/>
-    <path d="M210 366 v154" stroke="${OUTLINE}" stroke-width="8"/>
-    <rect x="136" y="404" width="40" height="26" rx="5" fill="none" stroke="${OUTLINE}" stroke-width="7"/>
-    <rect x="244" y="404" width="40" height="26" rx="5" fill="none" stroke="${OUTLINE}" stroke-width="7"/>`},
+    <path d="${SHIRT}" fill="#5c7fa8" stroke="${OUTLINE}" stroke-width="${SW}" stroke-linejoin="round"/>
+    <path d="M210 372 v106" stroke="${OUTLINE}" stroke-width="8"/>
+    <rect x="146" y="404" width="38" height="24" rx="5" fill="none" stroke="${OUTLINE}" stroke-width="7"/>
+    <rect x="236" y="404" width="38" height="24" rx="5" fill="none" stroke="${OUTLINE}" stroke-width="7"/>`},
   {id:'dress', name:'Сукня', svg:`
-    <path d="M96 344 q48 24 74 24 q22 0 40 -16 q18 16 40 16 q26 0 74 -24 L344 520 L76 520 Z"
-      fill="#ff6f9c" stroke="${OUTLINE}" stroke-width="${SW}" stroke-linejoin="round"/>
-    <path d="M76 434 q134 24 268 0" stroke="#fff" stroke-width="9" fill="none" opacity=".75"/>`},
+    <path d="${SHIRT}" fill="#ff6f9c" stroke="${OUTLINE}" stroke-width="${SW}" stroke-linejoin="round"/>
+    <path d="M120 428 q90 22 180 0" stroke="#fff" stroke-width="10" fill="none" opacity=".75"/>
+    <circle cx="210" cy="398" r="9" fill="#fff" opacity=".85"/>`},
   {id:'suit', name:'Піджак', svg:`
-    <path d="M80 340 q56 26 90 26 q22 0 40 -16 q18 16 40 16 q34 0 90 -26 L340 520 L80 520 Z"
-      fill="#3d5a80" stroke="${OUTLINE}" stroke-width="${SW}" stroke-linejoin="round"/>
-    <path d="M170 356 L210 430 L250 356 L250 520 L170 520 Z" fill="#e8e2d5" stroke="${OUTLINE}" stroke-width="8" stroke-linejoin="round"/>
-    <path d="M150 366 L188 424 M270 366 L232 424" stroke="${OUTLINE}" stroke-width="7" fill="none"/>`},
+    <path d="${SHIRT}" fill="#3d5a80" stroke="${OUTLINE}" stroke-width="${SW}" stroke-linejoin="round"/>
+    <path d="M176 360 L210 434 L244 360 Q244 468 210 478 Q176 468 176 360 Z"
+      fill="#e8e2d5" stroke="${OUTLINE}" stroke-width="8" stroke-linejoin="round"/>
+    <path d="M152 372 L190 430 M268 372 L230 430" stroke="${OUTLINE}" stroke-width="7" fill="none"/>`},
   {id:'ua', name:'Синьо-жовта', svg:`
-    <path d="M80 340 q56 26 90 26 q22 0 40 -16 q18 16 40 16 q34 0 90 -26 L340 430 L80 430 Z"
-      fill="#4a7de0" stroke="${OUTLINE}" stroke-width="${SW}" stroke-linejoin="round"/>
-    <path d="M80 424 L340 424 L340 520 L80 520 Z" fill="#ffd43b" stroke="${OUTLINE}" stroke-width="${SW}" stroke-linejoin="round"/>`},
+    <path d="${SHIRT}" fill="#4a7de0" stroke="${OUTLINE}" stroke-width="${SW}" stroke-linejoin="round"/>
+    <path d="M115 416 A102 98 0 0 0 305 416 Q210 446 115 416 Z" fill="#ffd43b" stroke="${OUTLINE}" stroke-width="8" stroke-linejoin="round"/>`},
+  {id:'sweater', name:'Светр', svg:`
+    <path d="${SHIRT_LOW}" fill="#c4623f" stroke="${OUTLINE}" stroke-width="${SW}" stroke-linejoin="round"/>
+    ${[0,1,2,3].map(i=>`<path d="M${138+i*8} ${384+i*26} q${72-i*4} 16 ${144-i*8} 0" fill="none" stroke="#a44e30" stroke-width="7"/>`).join('')}`},
 ];
 
 /* ---------- прикраси на шию ---------- */
@@ -603,9 +610,6 @@ function duckSVG(st){
   const back = find(BACKS, st.back);
   const eyes = find(EYES, st.eyes);
   return `
-  <defs>
-    <clipPath id="bodyClip"><ellipse cx="210" cy="392" rx="102" ry="98"/></clipPath>
-  </defs>
   ${back.svg}
   <g>
     <!-- лапки -->
@@ -618,7 +622,7 @@ function duckSVG(st){
     <ellipse cx="210" cy="392" rx="102" ry="98" fill="${body.main}" stroke="${OUTLINE}" stroke-width="${SW}"/>
 
     <!-- одяг: обрізається точно по тілу -->
-    <g clip-path="url(#bodyClip)">${find(CLOTHES, st.clothes).svg}</g>
+    ${find(CLOTHES, st.clothes).svg}
 
     <!-- крила -->
     <path d="M114 348 q-58 -14 -72 38 q-12 48 36 58 q38 -34 36 -96 z"
